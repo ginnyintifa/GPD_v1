@@ -68,7 +68,7 @@ Please note that Users' own mutation file should follow this format with exact c
 
 # 2 Mutation Extraction 
 
-GPD is designed for cancer specific analysis extracting information from a Pan-cancer file, it processes a designated list of patients (barcodes) in a certain cancer type at a time. A list of barcodes should be provided, it can be from the matching clinical file or simple read from the mutation file in the following way:
+GPD is designed for cancer specific analysis extracting information from a Pan-cancer file, it processes a designated list of patients (barcodes) in a certain cancer type at a time. A list of barcodes should be provided, it can be from the matching clinical file or simply read from the mutation file in the following way:
 ```{r}
 
 acc_mut = fread("/Users/ginny/Google Drive/R_GPD/GPD_package_0401/package_files/acc_mutation.tsv",
