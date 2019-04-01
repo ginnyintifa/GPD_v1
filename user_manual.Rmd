@@ -121,7 +121,7 @@ This function will produce three output files:
 3 "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/npc_summarising_count.tsv"
 
 
-These files present mutation mapping results will can be used in subsequent statistical analysis. 
+These files present mutation mapping results which can be used in subsequent statistical analysis. 
 
 
 
