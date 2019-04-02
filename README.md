@@ -63,22 +63,22 @@ Q14D04	778	788	783	ps	VEPH1	ENSG00000197415	PTM
 Q14D33	50	150	100	zf-3CxxC	RTP5	ENSG00000277949	Domain
 
 ```
-Please note that Users' own mutation file should follow this format with exact columns and column names. 
+Please note that users' own files should follow these formats with exact columns and column names. 
 
 
 # 2 Mutation Extraction 
 
-GPD is designed for cancer specific analysis extracting information from a Pan-cancer file, it processes a designated list of patients (barcodes) in a certain cancer type at a time. A list of barcodes should be provided, it can be from the matching clinical file or simply read from the mutation file in the following way:
+GPD is originally designed for cancer specific analysis extracting information from a Pan-cancer file, it processes a designated list of patients (barcodes) in a certain cancer type at a time. A list of barcodes should be provided, it can be from the matching clinical file or simply reading from the mutation file in the following way:
 ```{r}
 
-acc_mut = fread("/Users/ginny/Google Drive/R_GPD/GPD_package_0401/package_files/acc_mutation.tsv",
-                stringsAsFactors = F)
+acc_mut = read.table("/Users/ginny/Google Drive/R_GPD/GPD_package_0401/package_files/acc_mutation.tsv",
+                header = T)
 acc_barcode = acc_mut$barcode
 ```
 
 
 
-An example of running all ACC sample is as the following:
+An example of running all ACC somatic mutations from TCGA Pan-Cancer dataset is as the following:
 ```{r}
 
 
@@ -94,17 +94,17 @@ extraction_annotation_pos(mutation_file = "/Users/ginny/Google Drive/R_GPD/GPD_p
 
 This process will produce four output files:
 1 "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_mutation.tsv"
-2 "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_pc.tsv"
-3 "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_npc.tsv"
-4 "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_pc_pos.tsv"
+2 "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_mutation_pc.tsv"
+3 "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_mutation_npc.tsv"
+4 "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_mutation_pc_pos.tsv"
 The last two will be used in the subsequent function. 
 
 # 3 Mutation Mapping 
 
 ```{r}
 piu_mapping (piu_filename =  "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/GPD/package_files/ptm_pfam_combine.tsv",
-             pc_data_name  = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_pc_pos.tsv",
-             npc_data_name = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_npc.tsv",
+             pc_data_name  = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_mutation_pc_pos.tsv",
+             npc_data_name = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_mutation_npc.tsv",
              cancer_barcode = acc_barcode,
              output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/")
 
