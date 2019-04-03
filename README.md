@@ -121,7 +121,7 @@ These files present mutation mapping results which can be used in subsequent sta
 
 #4 Subsequent analysis
 
-Here we provide code for survival analysis. You may refer to it in file "GPD_association_analysis_functions.R"
+Here we provide code for survival analysis. You may refer to "GPD_association_analysis_functions.R" and "GPD_association_implementation.Rmd"
 
 
 
