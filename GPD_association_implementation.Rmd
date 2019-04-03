@@ -1,0 +1,216 @@
+
+
+
+###  Association analysis between somatic units and OS
+
+```{r}
+
+
+
+library(data.table)
+library(dplyr)
+library(magrittr)
+library(survival)
+library(qvalue)
+
+
+
+cdr_clinical = fread("/data/ginny/tcga_pancan/important_files/primary_TCGA_CDR.tsv", stringsAsFactors = F)
+
+acc_gender = T
+
+this_cdr = cdr_clinical %>%
+dplyr::filter(type == "ACC")
+ 
+this_barcode = this_cdr$bcr_patient_barcode
+
+first_output_dir = paste0("/data/ginny/tcga_pancan/TCGA_all/ACC_somatic/")
+second_output_dir = paste0(first_output_dir,"ACC_summarise_mutation_201901/")
+this_piu_filename = paste0(second_output_dir,"piu_mapping_count.tsv")
+this_bpiu_filename = paste0(second_output_dir, "bpiu_mapping_count.tsv")
+this_npc_filename = paste0(second_output_dir, "npc_summarising_count.tsv")
+third_dir = paste0(first_output_dir, "cox_test_201902/")
+
+
+
+univariate_cox_model_for_piu (piu_filename = this_piu_filename,
+                                                 cdr_clinical = this_cdr,
+                                                 gender_as_covariate = acc_gender,
+                                                 race_group_min = 6,
+                                                 min_surv_days = 90,
+                                                 min_surv_people = 5,
+                                                 patient_sum_min = 3,
+                                                 mutation_type = "somatic",
+                                                 output_dir = third_dir)
+
+
+
+univariate_cox_model_for_bpiu (bpiu_filename = this_bpiu_filename,
+                                                 cdr_clinical = this_cdr,
+                                                 gender_as_covariate = acc_gender,
+                                                 race_group_min = 6,
+                                                 min_surv_days = 90,
+                                                 min_surv_people = 5,
+                                                 patient_sum_min = 3,
+                                                 mutation_type = "somatic",
+                                                 output_dir = third_dir)
+
+
+univariate_cox_model_for_npc (npc_filename = this_npc_filename,
+                                                 cdr_clinical = this_cdr,
+                                                 gender_as_covariate = acc_gender,
+                                                 race_group_min = 6,
+                                                 min_surv_days = 90,
+                                                 min_surv_people = 5,
+                                                 patient_sum_min = 3,
+                                                 mutation_type = "somatic",
+                                                 output_dir = third_dir)
+
+
+
+```
+
+
+### Association analysis between germline units and OS
+
+```{r}
+
+
+first_output_dir = paste0("/data/ginny/tcga_pancan/germline_raw_process/TCGA_all/ACC_germline/")
+second_output_dir = paste0(first_output_dir,"ACC_summarise_mutation_201901/")
+this_piu_filename = paste0(second_output_dir,"piu_mapping_count.tsv")
+this_bpiu_filename = paste0(second_output_dir, "bpiu_mapping_count.tsv")
+this_npc_filename = paste0(second_output_dir, "npc_summarising_count.tsv")
+third_dir = paste0(first_output_dir, "cox_test_201902/")
+
+
+
+univariate_cox_model_for_piu (piu_filename = this_piu_filename,
+                                                 cdr_clinical = this_cdr,
+                                                 gender_as_covariate = acc_gender,
+                                                 race_group_min = 6,
+                                                 min_surv_days = 90,
+                                                 min_surv_people = 5,
+                                                 patient_sum_min = 3,
+                                                 mutation_type = "germline",
+                                                 output_dir = third_dir)
+
+
+
+univariate_cox_model_for_bpiu (bpiu_filename = this_bpiu_filename,
+                                                 cdr_clinical = this_cdr,
+                                                 gender_as_covariate = acc_gender,
+                                                 race_group_min = 6,
+                                                 min_surv_days = 90,
+                                                 min_surv_people = 5,
+                                                 patient_sum_min = 3,
+                                                 mutation_type = "germline",
+                                                 output_dir = third_dir)
+
+
+univariate_cox_model_for_npc (npc_filename = this_npc_filename,
+                                                 cdr_clinical = this_cdr,
+                                                 gender_as_covariate = acc_gender,
+                                                 race_group_min = 6,
+                                                 min_surv_days = 90,
+                                                 min_surv_people = 5,
+                                                 patient_sum_min = 3,
+                                                 mutation_type = "germline",
+                                                 output_dir = third_dir)
+
+
+
+```
+
+
+### Association analysis for interaction between somatic and germline terms 
+
+
+```{r}
+## this does not matter because all units are selected regardless of significance 
+somatic_univariate_output_dir =  paste0("/data/ginny/tcga_pancan/TCGA_all/ACC_somatic/cox_test_201902/")
+
+somatic_dir = paste0("/data/ginny/tcga_pancan/TCGA_all/ACC_somatic/ACC_summarise_mutation_201901/")
+germline_dir =  paste0("/data/ginny/tcga_pancan/germline_raw_process/TCGA_all/ACC_germline/ACC_summarise_mutation_201901/")
+
+interaction_output_dir = paste0("/data/ginny/tcga_pancan/interaction_model/TCGA_all/ACC_interaction/all/")
+
+this_univariate_somatic_piu_results_filename = paste0(somatic_univariate_output_dir, "somatic_piu_cdr_univariate_test.tsv")
+this_univariate_somatic_bpiu_results_filename = paste0(somatic_univariate_output_dir, "somatic_bpiu_cdr_univariate_test.tsv")
+this_univariate_somatic_npc_results_filename = paste0(somatic_univariate_output_dir, "somatic_npc_cdr_univariate_test.tsv")
+
+
+this_somatic_piu_filename = paste0(somatic_dir, "piu_mapping_count.tsv")
+this_somatic_bpiu_filename = paste0(somatic_dir, "bpiu_summarising_count.tsv")
+this_somatic_npc_filename = paste0(somatic_dir, "npc_summarising_count.tsv")
+
+this_germline_piu_filename = paste0(germline_dir, "piu_mapping_count.tsv")
+this_germline_bpiu_filename = paste0(germline_dir, "bpiu_summarising_count.tsv")
+this_germline_npc_filename = paste0(germline_dir, "npc_summarising_count_lim.tsv")
+
+
+
+interaction_cox_model_for_somatic_units(
+   univariate_somatic_piu_results = this_univariate_somatic_piu_results_filename,
+  univariate_somatic_bpiu_results = this_univariate_somatic_bpiu_results_filename,
+  univariate_somatic_npc_results = this_univariate_somatic_npc_results_filename,
+  somatic_piu_filename = this_somatic_piu_filename,
+  somatic_bpiu_filename = this_somatic_bpiu_filename,
+  somatic_npc_filename = this_somatic_npc_filename,
+  germline_piu_filename = this_germline_piu_filename,
+  germline_bpiu_filename = this_germline_bpiu_filename,
+  germline_npc_filename = this_germline_npc_filename,
+  cdr_clinical = this_cdr,
+  gender_as_covariate = acc_gender,
+  race_group_min = 6,
+  min_surv_days = 90,
+  min_surv_people = 5,
+  patient_sum_min = 5,
+  mutation_type = "interaction",
+  sig_level = 1,
+  q_pvalue =quo(OS_count_pval),
+  q_status = quo(OS),
+  q_time = quo(OS.time),
+  q_race = quo(os_race),
+  v_status = "OS",
+  v_time = "OS.time",
+  v_race = "os_race",
+  output_dir = interaction_output_dir)
+
+
+
+ 
+  info_name  = paste0("/data/ginny/tcga_pancan/interaction_model/TCGA_all/ACC_interaction/all/OS_somatic_sig_unit_survival_info.tsv")
+  
+  info_data = fread(info_name,
+                    stringsAsFactors = F)
+  
+
+fit_survival_model_interaction_coeff_test(
+  surv_info_data = info_data,
+  germline_need_filename = paste0("/data/ginny/tcga_pancan/interaction_model/TCGA_all/ACC_interaction/all/OS_need_germline_counts.tsv"),
+  min_surv_days = 90,
+  min_surv_people = 5,
+  q_status = quo(OS),
+  q_time = quo(OS.time),
+  q_race = quo(os_race),
+  v_status = "OS",
+  v_time = "OS.time",
+  v_race = "os_race",
+  output_dir = paste0("/data/ginny/tcga_pancan/interaction_model/TCGA_all/ACC_interaction/test/"),
+  output_coeff_name = "interaction_model_result_test.tsv")
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
