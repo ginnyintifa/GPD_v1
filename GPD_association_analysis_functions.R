@@ -156,10 +156,6 @@ univariate_cox_model_for_npc = function(npc_filename,
   {
     
     
-    
-    ### an additional step for selecting valid genes 
-    
-    
     npc_unite = gene_counts_cdr_clinical_unite(
       gene_count_filename = npc_filename,
       cdr_clinical = cdr_clinical,
@@ -234,15 +230,8 @@ cdr_tidy_up_for_model = function(interest_variable_info, unite_data, race_group_
                                  output_name)
 {
   
-  # 
-  #   interest_variable_info = unit_unite[[3]]
-  #   unite_data = unit_unite[[1]]
-  #   race_group_min = race_group_min
-  #   output_dir = output_dir
-  #   output_name = "somatic_sig_unit_survival_info.tsv"
-  #   
-  #   
-  patient_count = unite_data %>%
+ 
+    patient_count = unite_data %>%
     dplyr::select(barcode, age_at_initial_pathologic_diagnosis,gender,one_of(interest_variable_info)) %>%
     dplyr::rename(age = age_at_initial_pathologic_diagnosis)
   
@@ -303,8 +292,7 @@ cdr_tidy_up_for_model = function(interest_variable_info, unite_data, race_group_
                   pfi_race, PFI, PFI.time,
                   one_of(interest_variable_info))
   
-  # cat("$$$$$$$$$$$$$$ write out for tidy up.", "\n")
-  
+
   
   write.table(patient_count_survival, paste0(output_dir, output_name),
               quote = F, row.names = F, sep = "\t")
@@ -323,14 +311,6 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
   
 {
   
-  # piu_count_filename = piu_filename
-  # cdr_clinical = cdr_clinical
-  # piu_of_interest = "domain"
-  # patient_sum_min = patient_sum_min
-  # output_dir = output_dir
-  # output_name = paste0(mutation_type,"_domain_cdr_clinical_unite.tsv")
-  # 
-  
   piu_count_df = fread(piu_count_filename,
                        stringsAsFactors = F)
   
@@ -345,8 +325,7 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
     dplyr::select(uniprot_accession, start_position, end_position, unit_name, gene_name, gene_id, unit_label,gene_info, piu_info, row_sum,
                   everything())
   
-  #piu_info = piu_count_sel$piu_info
-  
+
   if(nrow(piu_count_sel)>0)
   {
     which_barcode = grep("TCGA", colnames(piu_count_sel))
@@ -399,12 +378,6 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
                                           output_name)
   
 {
-  
-  # gene_count_filename = bpiu_filename
-  # cdr_clinical = cdr_clinical
-  # patient_sum_min = patient_sum_min
-  # output_dir = output_dir
-  # output_name = paste0(mutation_type,"_bpiu_cdr_clinical_unite.tsv")
   
   gene_count_df = fread(gene_count_filename,
                         stringsAsFactors = F)
@@ -470,15 +443,7 @@ fit_survival_model_v2_test= function(surv_info_data,
                                      output_dir,
                                      output_name)
 {
-  
-  # 
-  #   
-  #   surv_info_data = npc_info
-  #   interest_variable_info = npc_unite[[2]]
-  #   min_surv_time = min_surv_days
-  #   min_surv_people = min_surv_people
-  #   output_dir = output_dir
-  #   output_name = paste0(mutation_type,"_npc_cdr_univariate_test.tsv")
+  paste0(mutation_type,"_npc_cdr_univariate_test.tsv")
   #   
   endpoint_flag = c(T,T)
   v_status = c("OS","PFI")
@@ -628,7 +593,6 @@ fit_survival_model_v2_test= function(surv_info_data,
     }
     
     
-    ### change column names of this df 
     old_colnames = colnames(this_surv_result_df)
     new_colnames = gsub("this", v_status[i], old_colnames)
     colnames(this_surv_result_df) = new_colnames
@@ -668,13 +632,7 @@ fit_survival_model_no_gender_v2_test= function(surv_info_data,
                                                output_dir,
                                                output_name)
 {
-  # 
-  # surv_info_data = piu_info
-  # interest_variable_info = piu_unite[[3]]
-  # min_surv_time = min_surv_days
-  # min_surv_people = min_surv_people
-  # output_dir = output_dir
-  # output_name = paste0(mutation_type,"_piu_cdr_univariate_test.tsv")
+
   
   endpoint_flag = c(T,T)
   v_status = c("OS","PFI")
@@ -958,7 +916,7 @@ interaction_cox_model_for_somatic_units= function(univariate_somatic_piu_results
       
       
       somatic_npc_result = data.frame(unit_info = sig_npc$count_info,
-                                      gene_info = get_gene_info,I
+                                      gene_info = get_gene_info,
                                       unit_type = "nPC",
                                       stringsAsFactors = F)
       
@@ -971,10 +929,7 @@ interaction_cox_model_for_somatic_units= function(univariate_somatic_piu_results
   
   somatic_sig_unit = rbind(somatic_piu_result, somatic_bpiu_result, somatic_npc_result)
   
-  # Second, for each gene, pull out all the germline units
-  
-  # just grab relavent genes 
-  
+
   if(nrow(somatic_sig_unit)>0)
   {
     
@@ -1035,13 +990,11 @@ interaction_cox_model_for_somatic_units= function(univariate_somatic_piu_results
       colnames(grab_npc) = c("unit_info","unit_type", "gene_info", npc_patient_name, "row_sum")
     }
     
-    #put them together
     grab_sig_somatic = bind_rows(grab_piu, grab_bpiu, grab_npc)
     
     write.table(grab_sig_somatic, paste0(output_dir, v_status,"_sig_somatic_counts.tsv"),
                 sep = "\t", row.names = F, quote = F)
     
-    ######################################################################################3
     
     gene_to_grab = unique(somatic_sig_unit$gene_info)
     
@@ -1116,7 +1069,7 @@ interaction_cox_model_for_somatic_units= function(univariate_somatic_piu_results
     write.table(grab_need_germline, paste0(output_dir, v_status,"_need_germline_counts.tsv"),
                 sep = "\t", row.names = F, quote = F)
    
-     )
+     
     
     
     
