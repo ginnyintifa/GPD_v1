@@ -119,9 +119,9 @@ This function will produce three output files:
 
 These files present mutation mapping results which can be used in subsequent statistical analysis. 
 
-#4 Subsequent analysis
+# 4 Subsequent analysis
 
-Here we provide code for survival analysis. You may refer to "GPD_association_analysis_functions.R" and "GPD_association_implementation.Rmd"
+Here we provide code for survival analysis. You may refer to "GPD_association_implementation.Rmd" and "GPD_association_analysis_functions.R"
 
 
 
