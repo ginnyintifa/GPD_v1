@@ -2,6 +2,9 @@
 
 export(extraction_annotation_pos)
 export(piu_mapping)
+export(univariate_cox_model)
 import(data.table)
 import(dplyr)
 import(magrittr)
+import(qvalue)
+import(survival)

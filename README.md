@@ -2,7 +2,8 @@
 Gene-to-Protein-to-Disease (GPD): a segmentation-based approach for association analysis with whole exome sequencing data
 
 # 1 Preparation
-GPD can be downloaded and installed in R as follows. As a prerequisite, devtools must be installed:
+GPD can be downloaded and installed in R as follows. 
+As a prerequisite, devtools must be installed:
 
 ```{r}
 install.packages("devtools")

@@ -2,13 +2,14 @@
 % Please edit documentation in R/mutation_extraction_mapping_wrap.R
 \name{extraction_annotation_pos}
 \alias{extraction_annotation_pos}
-\title{Extract germline mutations annotated by the snpEff tool for a cancer type of your interest.}
+\title{This function generates two files as the final products. First, mutations which result in protein-consequence with
+effect on proteins annotated; Second, mutations without protein-consequence.}
 \usage{
-extraction_annotation_pos(mutation_file, cancer_type, cancer_barcode,
+extraction_annotation_pos(mutation_df, cancer_type, cancer_barcode,
   output_dir)
 }
 \arguments{
-\item{mutation_file}{File name of the mc3 somatic variants from TCGA.}
+\item{mutation_df}{Data frame of mc3 somatic variants from TCGA.}
 
 \item{cancer_type}{TCGA cancer type identifier, e.g. STAD, BRCA.}
 
@@ -21,8 +22,8 @@ This function generates two files as the final products. First, mutations which 
 effect on proteins annotated; Second, mutations without protein-consequence.
 }
 \examples{
-extraction_annotation_pos(mutation_file = "/data/ginny/tcga_pancan/important_files/mc3_info.tsv" ,
-                                 cancer_type = "STAD",
-                                 cancer_barcode = stad_barcode,
-                                 output_dir = "/data/ginny/tcga_pancan/STAD_somatic/")
+extraction_annotation_pos(mutation_df = sel_acc_mutation ,
+                                 cancer_type = "ACC",
+                                 cancer_barcode = sel_acc_barcode,
+                                 output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/")
 }
