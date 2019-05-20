@@ -126,7 +126,7 @@ An example of running a subset of ACC somatic mutations from TCGA Pan-Cancer dat
 extraction_annotation_pos(mutation_df = sel_acc_mutation
                                   cancer_type = "ACC",
                                   cancer_barcode = unique(sel_acc_mutation$barcode),
-                                  output_dir = "your_output_dir1")
+                                  output_dir = "your_output_dir1/")
 
 ```
 
@@ -159,7 +159,7 @@ piu_mapping (piu_df =  ptm_pfam_combine,
              pc_data_name  = "your_output_dir1/ACC_mutation_pc_pos.tsv",
              npc_data_name = "your_output_dir1/ACC_mutation_npc.tsv",
              cancer_barcode = unique(sel_acc_mutation$barcode),
-             output_dir = "your_output_dir2")
+             output_dir = "your_output_dir2/")
 
 ```
 
@@ -167,7 +167,7 @@ This function will produce three output files:
 
 * "your_output_dir2/piu_mapping.tsv"
 * "your_output_dir2/lu_summarising_count.tsv"
-* "your_output_dir2/npc_summarising_count.tsv"
+* "your_output_dir2/ncu_summarising_count.tsv"
 
 
 These files present mutation mapping results which can be used in subsequent statistical analysis. 
