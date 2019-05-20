@@ -3,12 +3,11 @@
 # library(dplyr)
 # library(magrittr)
 
-#' Extract germline mutations annotated by the snpEff tool for a cancer type of your interest.
 #' 
 #' This function generates two files as the final products. First, mutations which result in protein-consequence with
 #' effect on proteins annotated; Second, mutations without protein-consequence.
 #' 
-#' @param mutation_file File name of the mc3 somatic variants from TCGA. 
+#' @param mutation_df Data frame of mc3 somatic variants from TCGA. 
 #' @param cancer_type TCGA cancer type identifier, e.g. STAD, BRCA. 
 #' @param cancer_barcod A list of barcodes user wants to process, matching the last column of mutation file. 
 #' @param output_dir The directory you would like to have your output files in.
@@ -16,20 +15,20 @@
 #' @export
 #' @details 
 #' @examples 
-#' extraction_annotation_pos(mutation_file = "/data/ginny/tcga_pancan/important_files/mc3_info.tsv" ,
-#'                                  cancer_type = "STAD",
-#'                                  cancer_barcode = stad_barcode,
-#'                                  output_dir = "/data/ginny/tcga_pancan/STAD_somatic/")
+#' extraction_annotation_pos(mutation_df = acc_mutation ,
+#'                                  cancer_type = "ACC",
+#'                                  cancer_barcode = acc_barcode,
+#'                                  output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/")
 
 
 
-extraction_annotation_pos = function(mutation_file,
+extraction_annotation_pos = function(mutation_df,
                                              cancer_type,
                                              cancer_barcode,
                                              output_dir)
 {
   
-  select_cancer_mc3(mc3_filename = mutation_file ,
+  select_cancer_mc3(mc3_df = mutation_df ,
                     cancer_barcode = cancer_barcode,
                     output_dir = output_dir,
                     output_name = paste0(cancer_type,"_mutation.tsv"))
@@ -42,7 +41,7 @@ extraction_annotation_pos = function(mutation_file,
                            output_dir = output_dir,
                            pc_output_name = paste0(cancer_type, "_mutation_pc.tsv"),
                            npc_output_name = paste0(cancer_type, "_mutation_npc.tsv"))
-  cat("2/3...variants divided to PC and nPC parts.","\n")
+  cat("2/3...variants divided to PC and NPC parts.","\n")
   
   
   this_pc_name = paste0(output_dir, cancer_type, "_mutation_pc.tsv")
@@ -62,12 +61,7 @@ extraction_annotation_pos = function(mutation_file,
 
 
 
-## I will add whole gene count here.
-
-
-#' Map soamtic pc to piu and bpiu, summarise bpiu and npc per gene
-#' 
-#' This function generates three files as the final products. First, each piu mapped, second, bpiu summarised per gene, third, 
+#' This function generates three files as the final products. First, each piu mapped, second, lu summarised per gene, third, 
 #' npc summarised per gene.
 #' 
 #' @param piu_filename  The file provided by the package where the piu information is recorded.
@@ -79,47 +73,35 @@ extraction_annotation_pos = function(mutation_file,
 #' @export
 #' @details 
 #' @examples 
-#' piu_mapping (piu_filename =  "/data/ginny/tcga_pancan/important_files/ptm_domain_combine_df.tsv",
-#'                      pc_data_name  = 
-#'                        "/data/ginny/tcga_pancan/germline_raw_process/STAD_snpeff_annotation/snpeff_variant_anno_pc_pos.tsv",
-#'                      npc_data_name = 
-#'                        "/data/ginny/tcga_pancan/germline_raw_process/STAD_snpeff_annotation/snpeff_variant_anno_npc.tsv",
-#'                      cancer_barcode = stad_barcode,
-#"                      output_dir = "/data/ginny/tcga_pancan/germline_raw_process/STAD_summarise_mutation/")
+#' piu_mapping (piu_df = ptm_pfam_combine,
+#'                      pc_data_name  =  "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/ACC_mutation_pc_pos.tsv",
+#'                      npc_data_name = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/ACC_mutation_npc.tsv",
+#'                      cancer_barcode = acc_barcode,
+#"                      output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/")
 
-piu_mapping = function (piu_filename,
+piu_mapping = function (piu_df,
                                  pc_data_name,
                                  npc_data_name,
                                  cancer_barcode,
                                  output_dir)
   
 {
+   
   
   
-  # ptm_domain_filename = "/data/ginny/tcga_pancan/important_files/ptm_domain_combine_df.tsv"
-  # pc_data_name = "/data/ginny/tcga_pancan/TCGA_all/BRCA_somatic/BRCA_somatic_mc3_pc_pos.tsv"
-  # npc_data_name = "/data/ginny/tcga_pancan/TCGA_all/BRCA_somatic/BRCA_somatic_mc3_npc.tsv"
-  # cancer_barcode = brca_barcode
-  # locus_level_mut_min = 3
-  # gene_level_mut_min = 1
-  # output_dir = "/data/ginny/tcga_pancan/TCGA_all/BRCA_somatic/test/"
-  # 
-  
-  
-  
-  mc3_map_uni_piu (ptm_pfam_filename = piu_filename,
+  mc3_map_uni_piu (ptm_pfam_df = piu_df,
                              pc_data_name = pc_data_name,
                              cancer_barcode = cancer_barcode,
                              output_dir = output_dir,
                              piu_output_filename = "piu_mapping_count.tsv",
-                             bpiu_output_filename = "bpiu_summarising_count.tsv")
+                             lu_output_filename = "lu_summarising_count.tsv")
   
   if(file.exists(paste0(output_dir,"piu_mapping_count.tsv")))
   {
-    cat("1/2...PIU and bPIU count matrices generated.","\n")
+    cat("1/2...PIU and LU count matrices generated.","\n")
     
   }else{
-    cat("1/2...proceed to nPC mapping.","\n")
+    cat("1/2...proceed to NPC mapping.","\n")
   }
   
 

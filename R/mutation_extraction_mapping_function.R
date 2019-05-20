@@ -1,12 +1,12 @@
 
-select_cancer_mc3 = function(mc3_filename, cancer_barcode, output_dir, output_name)
+select_cancer_mc3 = function(mc3_df, cancer_barcode, output_dir, output_name)
   
   
 {
    
-  mc3 = fread(mc3_filename, stringsAsFactors = F)
+  #mc3 = fread(mc3_filename, stringsAsFactors = F)
   
-  sel_mc3 = mc3 %>%
+  sel_mc3 = mc3_df %>%
     dplyr::filter(barcode %in% cancer_barcode) %>%
     unique()%>%
     dplyr::group_by(Hugo_Symbol, Gene, Chromosome, Start_Position, End_Position,
@@ -281,20 +281,18 @@ locus_level_matrix = function(pc_data_name,
 
 
 
-mc3_map_uni_piu = function(ptm_pfam_filename,
+mc3_map_uni_piu = function(ptm_pfam_df,
                            pc_data_name,
                            cancer_barcode,
                            output_dir,
                            piu_output_filename,
-                           bpiu_output_filename)
+                           lu_output_filename)
   
   
 {
 
   pc_mut = fread(pc_data_name, stringsAsFactors = F)
-  piu = fread(ptm_pfam_filename, stringsAsFactors = F)%>%
-    na.omit()
-  
+  piu = ptm_pfam_df
   unique_prot = intersect(piu$gene_id, pc_mut$Gene)
   unique_sample = cancer_barcode
   
@@ -361,7 +359,7 @@ mc3_map_uni_piu = function(ptm_pfam_filename,
     
     #####################################################
     
-    bpiu_df = rbindlist(lapply(1:length(unique_prot), function(x)
+    lu_df = rbindlist(lapply(1:length(unique_prot), function(x)
       
     {
       
@@ -369,14 +367,14 @@ mc3_map_uni_piu = function(ptm_pfam_filename,
       this_prot_piu = piu%>%
         dplyr::filter(gene_id == this_prot)
       
-      this_bpiu_info = this_prot_piu %>%
+      this_lu_info = this_prot_piu %>%
         dplyr::select(gene_id,gene_name)%>%
         unique()%>%
         dplyr::top_n(n = 1, wt = gene_name)
       
       
-      count_bpiu_matrix = matrix(0, nrow = 1, ncol = length(unique_sample))
-      colnames(count_bpiu_matrix) = unique_sample
+      count_lu_matrix = matrix(0, nrow = 1, ncol = length(unique_sample))
+      colnames(count_lu_matrix) = unique_sample
       
       local = pc_mut %>%
         dplyr::filter(Gene == this_prot)
@@ -397,26 +395,26 @@ mc3_map_uni_piu = function(ptm_pfam_filename,
           
           if(sum(piu_row_flag)==0)
           {
-            count_bpiu_matrix[1, these_patient_col] = count_bpiu_matrix[1, these_patient_col] +1
+            count_lu_matrix[1, these_patient_col] = count_lu_matrix[1, these_patient_col] +1
           }
           
           
         }
       }
       
-      row_sum = rowSums(count_bpiu_matrix)
+      row_sum = rowSums(count_lu_matrix)
       
       
-      this_prot_bpiu_df = cbind(this_bpiu_info, count_bpiu_matrix, row_sum)
+      this_prot_lu_df = cbind(this_lu_info, count_lu_matrix, row_sum)
       
       if(x%%100 == 0)
         cat(x, "\n")
       
-      return(this_prot_bpiu_df)
+      return(this_prot_lu_df)
       
     }))
     
-    with_info_bpiu_df = bpiu_df %>%
+    with_info_lu_df = lu_df %>%
       dplyr::filter(row_sum>0) %>%
       dplyr::arrange(desc(row_sum))
     write.table(with_info_bpiu_df, paste0(output_dir, bpiu_output_filename), quote = F, row.names = F, sep = "\t")
