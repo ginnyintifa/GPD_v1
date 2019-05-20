@@ -123,7 +123,7 @@ An example of running a subset of ACC somatic mutations from TCGA Pan-Cancer dat
 
 
 
-extraction_annotation_pos(mutation_df = sel_acc_mutation
+extraction_annotation_pos(mutation_df = sel_acc_mutation,
                                   cancer_type = "ACC",
                                   cancer_barcode = unique(sel_acc_mutation$barcode),
                                   output_dir = "your_output_dir1/")
