@@ -15,9 +15,9 @@
 #' @export
 #' @details 
 #' @examples 
-#' extraction_annotation_pos(mutation_df = acc_mutation ,
+#' extraction_annotation_pos(mutation_df = sel_acc_mutation ,
 #'                                  cancer_type = "ACC",
-#'                                  cancer_barcode = acc_barcode,
+#'                                  cancer_barcode = sel_acc_barcode,
 #'                                  output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/")
 
 
@@ -76,7 +76,7 @@ extraction_annotation_pos = function(mutation_df,
 #' piu_mapping (piu_df = ptm_pfam_combine,
 #'                      pc_data_name  =  "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/ACC_mutation_pc_pos.tsv",
 #'                      npc_data_name = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/ACC_mutation_npc.tsv",
-#'                      cancer_barcode = acc_barcode,
+#'                      cancer_barcode = sel_acc_barcode,
 #"                      output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/")
 
 piu_mapping = function (piu_df,
@@ -84,7 +84,7 @@ piu_mapping = function (piu_df,
                                  npc_data_name,
                                  cancer_barcode,
                                  output_dir)
-  
+
 {
    
   

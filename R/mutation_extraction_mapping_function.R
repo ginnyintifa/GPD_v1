@@ -277,7 +277,7 @@ locus_level_matrix = function(pc_data_name,
 
 
 
-# map pc to piu and summarise to bpiu -------------------------------------
+# map pc to piu and summarise to lu-------------------------------------
 
 
 
@@ -290,6 +290,7 @@ mc3_map_uni_piu = function(ptm_pfam_df,
   
   
 {
+  
 
   pc_mut = fread(pc_data_name, stringsAsFactors = F)
   piu = ptm_pfam_df
@@ -417,7 +418,7 @@ mc3_map_uni_piu = function(ptm_pfam_df,
     with_info_lu_df = lu_df %>%
       dplyr::filter(row_sum>0) %>%
       dplyr::arrange(desc(row_sum))
-    write.table(with_info_bpiu_df, paste0(output_dir, bpiu_output_filename), quote = F, row.names = F, sep = "\t")
+    write.table(with_info_lu_df, paste0(output_dir, lu_output_filename), quote = F, row.names = F, sep = "\t")
     
     
     
