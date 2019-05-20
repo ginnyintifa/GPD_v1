@@ -67,8 +67,6 @@ annotate_mc3_pc_position_info= function(pc_data_name,
                                         output_dir,
                                         output_name)
 {
-  
-  
   pc_data = fread(pc_data_name, stringsAsFactors = F)
   
   
@@ -77,6 +75,7 @@ annotate_mc3_pc_position_info= function(pc_data_name,
   
   p_pos =  gsub("[[:alpha:]]","",p_p_pos)
   fp_pos = gsub("\\.","",p_pos)
+  
   start_end_pos = rbindlist(lapply(1:length(fp_pos), function(t){
     
     get_it = unlist(strsplit(fp_pos[t], split = "_"))

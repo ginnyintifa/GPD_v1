@@ -27,7 +27,6 @@ extraction_annotation_pos = function(mutation_df,
                                              cancer_barcode,
                                              output_dir)
 {
-  
   select_cancer_mc3(mc3_df = mutation_df ,
                     cancer_barcode = cancer_barcode,
                     output_dir = output_dir,
