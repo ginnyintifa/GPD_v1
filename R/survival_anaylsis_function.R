@@ -12,6 +12,7 @@ univariate_cox_model_for_piu = function(piu_filename,
                                                 mutation_type = "somatic",
                                                 output_dir)
 {
+  
    
   if(file.exists(piu_filename))
   {
@@ -33,22 +34,22 @@ univariate_cox_model_for_piu = function(piu_filename,
       
       if(gender_as_covariate == T)
       {
-        fit_survival_model_v2_test(
+        survival_model(
           surv_info_data = piu_info,
           interest_variable_info = piu_unite[[3]],
           min_surv_time = min_surv_days,
           min_surv_people = min_surv_people,
           output_dir = output_dir,
-          output_name = paste0(mutation_type,"_piu_cdr_univariate_test.tsv"))
+          output_name = paste0(mutation_type,"_piu_cdr_univariate.tsv"))
         
       }else{
-        fit_survival_model_no_gender_v2_test(
+        survival_model_no_gender(
           surv_info_data = piu_info,
           interest_variable_info = piu_unite[[3]],
           min_surv_time = min_surv_days,
           min_surv_people = min_surv_people,
           output_dir = output_dir,
-          output_name = paste0(mutation_type,"_piu_cdr_univariate_test.tsv"))
+          output_name = paste0(mutation_type,"_piu_cdr_univariate.tsv"))
       }
     }else{
       cat("...this type of PIU level data not available.", "\n")
@@ -62,7 +63,7 @@ univariate_cox_model_for_piu = function(piu_filename,
 
 
 
-univariate_cox_model_for_bpiu = function(bpiu_filename,
+univariate_cox_model_for_lu = function(lu_filename,
                                                  cdr_clinical,
                                                  gender_as_covariate = T,
                                                  race_group_min = 6,
@@ -73,75 +74,70 @@ univariate_cox_model_for_bpiu = function(bpiu_filename,
                                                  output_dir)
 {
   
-  if(file.exists(bpiu_filename))
+  if(file.exists(lu_filename))
   {
     
     ### an additional step for selecting valid genes 
     
     
-    bpiu_unite = gene_counts_cdr_clinical_unite(
-      gene_count_filename = bpiu_filename,
+    lu_unite = gene_counts_cdr_clinical_unite(
+      gene_count_filename = lu_filename,
       cdr_clinical = cdr_clinical,
       patient_sum_min = patient_sum_min,
       output_dir = output_dir,
-      output_name = paste0(mutation_type,"_bpiu_cdr_clinical_unite.tsv"))
+      output_name = paste0(mutation_type,"_lu_cdr_clinical_unite.tsv"))
     
     
     
-    if(file.exists(paste0(output_dir,paste0(mutation_type,"_bpiu_cdr_clinical_unite.tsv"))))
+    if(file.exists(paste0(output_dir,paste0(mutation_type,"_lu_cdr_clinical_unite.tsv"))))
     {
-      bpiu_info = cdr_tidy_up_for_model(
-        interest_variable_info = bpiu_unite[[2]],
-        unite_data = bpiu_unite[[1]],
+      lu_info = cdr_tidy_up_for_model(
+        interest_variable_info = lu_unite[[2]],
+        unite_data = lu_unite[[1]],
         race_group_min = race_group_min,
         output_dir = output_dir,
-        output_name = paste0(mutation_type,"_bpiu_survival_info.tsv"))
+        output_name = paste0(mutation_type,"_lu_survival_info.tsv"))
       
-      cat("cancer patient gene dimension: ", dim(bpiu_info), "\n")  
+    #  cat("cancer patient gene dimension: ", dim(lu_info), "\n")  
       
       
       if(gender_as_covariate == T)
       {
-        fit_survival_model_v2_test(
-          surv_info_data = bpiu_info,
-          interest_variable_info = bpiu_unite[[2]],
+        survival_model(
+          surv_info_data = lu_info,
+          interest_variable_info = lu_unite[[2]],
           min_surv_time = min_surv_days,
           min_surv_people = min_surv_people,
           output_dir = output_dir,
-          output_name = paste0(mutation_type,"_bpiu_cdr_univariate_test.tsv"))
+          output_name = paste0(mutation_type,"_lu_cdr_univariate.tsv"))
         
       }else{
-        fit_survival_model_no_gender_v2_test(
-          surv_info_data = bpiu_info,
-          interest_variable_info = bpiu_unite[[2]],
+        survival_model_no_gender(
+          surv_info_data = lu_info,
+          interest_variable_info = lu_unite[[2]],
           min_surv_time = min_surv_days,
           min_surv_people = min_surv_people,
           output_dir = output_dir,
-          output_name = paste0(mutation_type,"_bpiu_cdr_univariate_test.tsv"))
+          output_name = paste0(mutation_type,"_lu_cdr_univariate.tsv"))
       }
     }else{
-      cat("...this bPIU data not available.", "\n")
+      cat("...this lu data not available.", "\n")
       
     }
     
-    #################
-    
-    cat("1/1...univariate Cox regression model on bPIU counts fitted!", "\n")
-    
+
   }else{
-    cat("1/1...bPIU data not available.", "\n")
-    
+
   }
   
-  cat("Univariate Cox regression models fitted!", "\n")
-  
+
 }
 
 
 
 
 
-univariate_cox_model_for_npc = function(npc_filename,
+univariate_cox_model_for_ncu = function(ncu_filename,
                                                 cdr_clinical,
                                                 gender_as_covariate = T,
                                                 race_group_min = 6,
@@ -152,71 +148,68 @@ univariate_cox_model_for_npc = function(npc_filename,
                                                 output_dir)
 {
   
-  if(file.exists(npc_filename))
+  if(file.exists(ncu_filename))
   {
     
     
-    npc_unite = gene_counts_cdr_clinical_unite(
-      gene_count_filename = npc_filename,
+    ncu_unite = gene_counts_cdr_clinical_unite(
+      gene_count_filename = ncu_filename,
       cdr_clinical = cdr_clinical,
       patient_sum_min = patient_sum_min,
       output_dir = output_dir,
-      output_name = paste0(mutation_type,"_npc_cdr_clinical_unite.tsv"))
+      output_name = paste0(mutation_type,"_ncu_cdr_clinical_unite.tsv"))
     
     
     
-    if(file.exists(paste0(output_dir,paste0(mutation_type,"_npc_cdr_clinical_unite.tsv"))))
+    if(file.exists(paste0(output_dir,paste0(mutation_type,"_ncu_cdr_clinical_unite.tsv"))))
     {
-      npc_info = cdr_tidy_up_for_model(
-        interest_variable_info = npc_unite[[2]],
-        unite_data = npc_unite[[1]],
+      ncu_info = cdr_tidy_up_for_model(
+        interest_variable_info = ncu_unite[[2]],
+        unite_data = ncu_unite[[1]],
         race_group_min = race_group_min,
         output_dir = output_dir,
-        output_name = paste0(mutation_type,"_npc_survival_info.tsv"))
+        output_name = paste0(mutation_type,"_ncu_survival_info.tsv"))
       
-      cat("cancer patient gene dimension: ", dim(npc_info), "\n")  
+      #cat("cancer patient gene dimension: ", dim(ncu_info), "\n")  
       
-      if(length(npc_unite[[2]])>0)
+      if(length(ncu_unite[[2]])>0)
       {
         
         if(gender_as_covariate == T)
         {
-          fit_survival_model_v2_test(
-            surv_info_data = npc_info,
-            interest_variable_info = npc_unite[[2]],
+          survival_model(
+            surv_info_data = ncu_info,
+            interest_variable_info = ncu_unite[[2]],
             min_surv_time = min_surv_days,
             min_surv_people = min_surv_people,
             output_dir = output_dir,
-            output_name = paste0(mutation_type,"_npc_cdr_univariate_test.tsv"))
+            output_name = paste0(mutation_type,"_ncu_cdr_univariate.tsv"))
           
         }else{
-          fit_survival_model_no_gender_v2_test(
-            surv_info_data = npc_info,
-            interest_variable_info = npc_unite[[2]],
+          survival_model_no_gender(
+            surv_info_data = ncu_info,
+            interest_variable_info = ncu_unite[[2]],
             min_surv_time = min_surv_days,
             min_surv_people = min_surv_people,
             output_dir = output_dir,
-            output_name = paste0(mutation_type,"_npc_cdr_univariate_test.tsv"))
+            output_name = paste0(mutation_type,"_ncu_cdr_univariate.tsv"))
         }
         
       }
       
       
     }else{
-      cat("...this nPC data not available.", "\n")
+      cat("...this ncu data not available.", "\n")
       
     }
     
 
-    cat("1/1...univariate Cox regression model on nPC counts fitted!", "\n")
-    
+
   }else{
-    cat("1/1...nPC data not available.", "\n")
-    
+
   }
   
-  cat("Univariate Cox regression models fitted!", "\n")
-  
+
 }
 
 
@@ -232,8 +225,7 @@ cdr_tidy_up_for_model = function(interest_variable_info, unite_data, race_group_
   
  
     patient_count = unite_data %>%
-    dplyr::select(barcode, age_at_initial_pathologic_diagnosis,gender,one_of(interest_variable_info)) %>%
-    dplyr::rename(age = age_at_initial_pathologic_diagnosis)
+    dplyr::select(barcode, age,gender,one_of(interest_variable_info)) 
   
   unite_data$race[grep("\\[", unite_data$race)] = "OTHER"
   
@@ -246,56 +238,65 @@ cdr_tidy_up_for_model = function(interest_variable_info, unite_data, race_group_
   os_data$race[which(os_data$race %in% os_race_minor$Var1)] = "OTHER"
   colnames(os_data)[which(colnames(os_data)=="race")] = "os_race"
   
+  # 
+  # dss_data = unite_data %>%
+  #   dplyr::select(barcode, race, DSS, DSS.time) %>%
+  #   na.omit()
+  # dss_race_freq = as.data.frame(table(dss_data$race))
+  # dss_race_minor = dss_race_freq %>%
+  #   dplyr::filter(Freq<race_group_min)
+  # dss_data$race[which(dss_data$race %in% dss_race_minor$Var1)] = "OTHER"
+  # colnames(dss_data)[which(colnames(dss_data)=="race")] = "dss_race"
+  # 
+  # 
+  # dfi_data = unite_data %>%
+  #   dplyr::select(barcode, race, DFI, DFI.time) %>%
+  #   na.omit()
+  # 
+  # dfi_race_freq = as.data.frame(table(dfi_data$race))
+  # dfi_race_minor = dfi_race_freq %>%
+  #   dplyr::filter(Freq<race_group_min)
+  # dfi_data$race[which(dfi_data$race %in% dfi_race_minor$Var1)] = "OTHER"
+  # colnames(dfi_data)[which(colnames(dfi_data)=="race")] = "dfi_race"
+  # 
+  # 
+  # pfi_data = unite_data %>%
+  #   dplyr::select(barcode, race, PFI, PFI.time) %>%
+  #   na.omit()
+  # pfi_race_freq = as.data.frame(table(pfi_data$race))
+  # pfi_race_minor = pfi_race_freq %>%
+  #   dplyr::filter(Freq<race_group_min)
+  # pfi_data$race[which(pfi_data$race %in% pfi_race_minor$Var1)] = "OTHER"
+  # colnames(pfi_data)[which(colnames(pfi_data)=="race")] = "pfi_race"
+  # 
+  # 
   
-  dss_data = unite_data %>%
-    dplyr::select(barcode, race, DSS, DSS.time) %>%
-    na.omit()
-  dss_race_freq = as.data.frame(table(dss_data$race))
-  dss_race_minor = dss_race_freq %>%
-    dplyr::filter(Freq<race_group_min)
-  dss_data$race[which(dss_data$race %in% dss_race_minor$Var1)] = "OTHER"
-  colnames(dss_data)[which(colnames(dss_data)=="race")] = "dss_race"
   
-  
-  dfi_data = unite_data %>%
-    dplyr::select(barcode, race, DFI, DFI.time) %>%
-    na.omit()
-  
-  dfi_race_freq = as.data.frame(table(dfi_data$race))
-  dfi_race_minor = dfi_race_freq %>%
-    dplyr::filter(Freq<race_group_min)
-  dfi_data$race[which(dfi_data$race %in% dfi_race_minor$Var1)] = "OTHER"
-  colnames(dfi_data)[which(colnames(dfi_data)=="race")] = "dfi_race"
-  
-  
-  pfi_data = unite_data %>%
-    dplyr::select(barcode, race, PFI, PFI.time) %>%
-    na.omit()
-  pfi_race_freq = as.data.frame(table(pfi_data$race))
-  pfi_race_minor = pfi_race_freq %>%
-    dplyr::filter(Freq<race_group_min)
-  pfi_data$race[which(pfi_data$race %in% pfi_race_minor$Var1)] = "OTHER"
-  colnames(pfi_data)[which(colnames(pfi_data)=="race")] = "pfi_race"
-  
-  
-  
-  
+  # patient_count_survival = patient_count %>%
+  #   dplyr::left_join(os_data, by = "barcode") %>%
+  #   dplyr::left_join(dss_data, by = "barcode") %>%
+  #   dplyr::left_join(dfi_data, by =  "barcode") %>%
+  #   dplyr::left_join(pfi_data, by = "barcode") %>%
+  #   dplyr::select(barcode, age, gender,
+  #                 os_race, OS, OS.time,
+  #                 dss_race, DSS, DSS.time,
+  #                 dfi_race, DFI, DFI.time,
+  #                 pfi_race, PFI, PFI.time,
+  #                 one_of(interest_variable_info))
+  # 
+
   patient_count_survival = patient_count %>%
     dplyr::left_join(os_data, by = "barcode") %>%
-    dplyr::left_join(dss_data, by = "barcode") %>%
-    dplyr::left_join(dfi_data, by =  "barcode") %>%
-    dplyr::left_join(pfi_data, by = "barcode") %>%
-    dplyr::select(barcode, age, gender,
+      dplyr::select(barcode, age, gender,
                   os_race, OS, OS.time,
-                  dss_race, DSS, DSS.time,
-                  dfi_race, DFI, DFI.time,
-                  pfi_race, PFI, PFI.time,
                   one_of(interest_variable_info))
   
-
   
-  write.table(patient_count_survival, paste0(output_dir, output_name),
-              quote = F, row.names = F, sep = "\t")
+  
+  
+  
+ # write.table(patient_count_survival, paste0(output_dir, output_name),
+   #           quote = F, row.names = F, sep = "\t")
   
   return(patient_count_survival)
   
@@ -345,8 +346,8 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
     
     
     piu_clinical_unite_data = piu_count %>%
-      dplyr::left_join(cdr_clinical, by = c("barcode" = "bcr_patient_barcode")) %>%
-      dplyr::select(barcode,colnames(cdr_clinical)[3:34],everything())
+      dplyr::left_join(cdr_clinical, by = "barcode") %>%
+      dplyr::select(barcode,age, gender, race, OS, OS.time,everything())
     
     
     return_list = vector(mode = "list", length = 4)
@@ -357,8 +358,8 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
     return_list[[4]] = piu_count_sel$gene_id
     
     
-    write.table(return_list[[1]], paste0(output_dir, output_name),
-                quote = F, row.names = F, sep = "\t")
+  #  write.table(return_list[[1]], paste0(output_dir, output_name),
+   #             quote = F, row.names = F, sep = "\t")
     
     return(return_list)
     
@@ -412,8 +413,8 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
   
   
   gene_clinical_unite_data = gene_count %>%
-    dplyr::left_join(cdr_clinical, by = c("barcode" = "bcr_patient_barcode")) %>%
-    dplyr::select(barcode,colnames(cdr_clinical)[3:34],everything())
+    dplyr::left_join(cdr_clinical, by = "barcode") %>%
+    dplyr::select(barcode,age, gender, race, OS, OS.time,everything())
   
   
   return_list = vector(mode = "list", length = 2)
@@ -422,8 +423,8 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
   return_list[[2]] = gene_count_sel$gene_info
   
   
-  write.table(return_list[[1]], paste0(output_dir, output_name),
-              quote = F, row.names = F, sep = "\t")
+ # write.table(return_list[[1]], paste0(output_dir, output_name),
+  #            quote = F, row.names = F, sep = "\t")
   
   
   
@@ -436,32 +437,41 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
 
 
 
-fit_survival_model_v2_test= function(surv_info_data,
+survival_model= function(surv_info_data,
                                      interest_variable_info,
                                      min_surv_time,
                                      min_surv_people,
                                      output_dir,
                                      output_name)
 {
-  paste0(mutation_type,"_npc_cdr_univariate_test.tsv")
+  
+  # 
+  # surv_info_data = piu_info
+  # interest_variable_info = piu_unite[[3]]
+  # min_surv_time = min_surv_days
+  # min_surv_people = min_surv_people
+  # output_dir = output_dir
+  # output_name = paste0(mutation_type,"_piu_cdr_univariate.tsv")
+  # 
+  
   #   
-  endpoint_flag = c(T,T)
-  v_status = c("OS","PFI")
-  v_time = c("OS.time","PFI.time")
-  v_race = c("os_race","pfi_race")
+  endpoint_flag = c(T)
+  v_status = c("OS")
+  v_time = c("OS.time")
+  v_race = c("os_race")
   
   
-  q_status = quos(OS,PFI)
-  q_time = quos(OS.time,PFI.time)
-  q_race = quos(os_race,pfi_race)
+  q_status = quos(OS)
+  q_time = quos(OS.time)
+  q_race = quos(os_race)
   
   
-  list_surv_models = vector(mode = "list", length = 2)
+  list_surv_models = vector(mode = "list", length = 1)
   
-  for(i in 1:2)
+  for(i in 1:1)
   {
     
-    
+   # i = 1
     this_race = q_race[[i]]
     this_status = q_status[[i]]
     this_time = q_time[[i]]
@@ -501,7 +511,7 @@ fit_survival_model_v2_test= function(surv_info_data,
     
     this_surv_result_df = rbindlist(lapply(1:length(interest_variable_info), function(x)
     {
-      
+    #  x =1
       this_count_df = surv_info_data %>%
         dplyr::select(barcode, one_of(interest_variable_info[x]))
       this_count = this_surv_data %>%
@@ -625,7 +635,7 @@ fit_survival_model_v2_test= function(surv_info_data,
 
 
 
-fit_survival_model_no_gender_v2_test= function(surv_info_data,
+survival_model_no_gender= function(surv_info_data,
                                                interest_variable_info,
                                                min_surv_time,
                                                min_surv_people,
@@ -634,20 +644,19 @@ fit_survival_model_no_gender_v2_test= function(surv_info_data,
 {
 
   
-  endpoint_flag = c(T,T)
-  v_status = c("OS","PFI")
-  v_time = c("OS.time","PFI.time")
-  v_race = c("os_race","pfi_race")
+  endpoint_flag = c(T)
+  v_status = c("OS")
+  v_time = c("OS.time")
+  v_race = c("os_race")
+  
+  q_status = quos(OS)
+  q_time = quos(OS.time)
+  q_race = quos(os_race)
   
   
-  q_status = quos(OS,PFI)
-  q_time = quos(OS.time,PFI.time)
-  q_race = quos(os_race,pfi_race)
+  list_surv_models = vector(mode = "list", length = 1)
   
-  
-  list_surv_models = vector(mode = "list", length = 2)
-  
-  for(i in 1:2)
+  for(i in 1:1)
   {
     # i = 1
     
@@ -690,8 +699,7 @@ fit_survival_model_no_gender_v2_test= function(surv_info_data,
     
     this_surv_result_df = rbindlist(lapply(1:length(interest_variable_info), function(x)
     {
-      # x = 1
-      
+
       this_count_df = surv_info_data %>%
         dplyr::select(barcode, one_of(interest_variable_info[x]))
       this_count = this_surv_data %>%
@@ -770,7 +778,6 @@ fit_survival_model_no_gender_v2_test= function(surv_info_data,
     }
     
     
-    ### change column names of this df 
     old_colnames = colnames(this_surv_result_df)
     new_colnames = gsub("this", v_status[i], old_colnames)
     colnames(this_surv_result_df) = new_colnames
@@ -794,291 +801,4 @@ fit_survival_model_no_gender_v2_test= function(surv_info_data,
   
   
 }
-
-
-
-interaction_cox_model_for_somatic_units= function(univariate_somatic_piu_results,
-                                                  univariate_somatic_bpiu_results,
-                                                  univariate_somatic_npc_results,
-                                                  somatic_piu_filename,
-                                                  somatic_bpiu_filename,
-                                                  somatic_npc_filename,
-                                                  germline_piu_filename,
-                                                  germline_bpiu_filename,
-                                                  germline_npc_filename,
-                                                  cdr_clinical,
-                                                  gender_as_covariate,
-                                                  race_group_min = 6,
-                                                  min_surv_days = 90,
-                                                  min_surv_people = 5,
-                                                  patient_sum_min = 3,
-                                                  mutation_type = "interaction",
-                                                  sig_level = 0.05,
-                                                  q_pvalue,
-                                                  q_status,
-                                                  q_time,
-                                                  q_race,
-                                                  v_status,
-                                                  v_time,
-                                                  v_race,
-                                                  output_dir = interaction_output_dir)
-
-{
-  
-  somatic_piu_result = data.frame(unit_info = character(0),
-                                  gene_info = character(0),
-                                  unit_type = character(0),
-                                  stringsAsFactors = F)
-  if(file.exists(univariate_somatic_piu_results))
-  {
-    univariate_somatic_piu = fread(univariate_somatic_piu_results, stringsAsFactors = F)
-    
-    sig_piu = univariate_somatic_piu%>%
-      dplyr::filter(!!q_pvalue <= sig_level)
-    
-    if(nrow(sig_piu)>0)
-    {
-      
-      get_gene_info = unlist(lapply(1:nrow(sig_piu), function(x){
-        
-        
-        this_break = unlist(strsplit(sig_piu$count_info[x], split = "_"))
-        this_gene_info = paste(this_break[(length(this_break)-1):length(this_break)],
-                               collapse = "_")
-        
-        return(this_gene_info)
-        
-      }))
-      
-      somatic_piu_result = data.frame(unit_info = sig_piu$count_info,
-                                      gene_info = get_gene_info,
-                                      unit_type = "PIU",
-                                      stringsAsFactors = F)
-      
-      
-      
-      
-    }
-    
-    
-  }
-  
-  
-  
-  
-  somatic_bpiu_result = data.frame(unit_info = character(0),
-                                   gene_info = character(0),
-                                   unit_type = character(0),
-                                   stringsAsFactors = F)
-  if(file.exists(univariate_somatic_bpiu_results))
-  {
-    univariate_somatic_bpiu = fread(univariate_somatic_bpiu_results, stringsAsFactors = F)
-    
-    sig_bpiu = univariate_somatic_bpiu%>%
-      dplyr::filter(!!q_pvalue <= sig_level)
-    
-    if(nrow(sig_bpiu)>0)
-    {
-      
-      get_gene_info = sig_bpiu$count_info
-      
-      
-      somatic_bpiu_result = data.frame(unit_info = sig_bpiu$count_info,
-                                       gene_info = get_gene_info,
-                                       unit_type = "bPIU",
-                                       stringsAsFactors = F)
-      
-      
-    }
-    
-    
-  }
-  
-  
-  
-  
-  
-  somatic_npc_result = data.frame(unit_info = character(0),
-                                  gene_info = character(0),
-                                  unit_type = character(0),
-                                  stringsAsFactors = F)
-  if(file.exists(univariate_somatic_npc_results))
-  {
-    univariate_somatic_npc = fread(univariate_somatic_npc_results, stringsAsFactors = F)
-    
-    sig_npc = univariate_somatic_npc%>%
-      dplyr::filter(!!q_pvalue <= sig_level)
-    
-    if(nrow(sig_npc)>0)
-    {
-      
-      get_gene_info = sig_npc$count_info
-      
-      
-      somatic_npc_result = data.frame(unit_info = sig_npc$count_info,
-                                      gene_info = get_gene_info,
-                                      unit_type = "nPC",
-                                      stringsAsFactors = F)
-      
-      
-    }
-    
-    
-  }
-  
-  
-  somatic_sig_unit = rbind(somatic_piu_result, somatic_bpiu_result, somatic_npc_result)
-  
-
-  if(nrow(somatic_sig_unit)>0)
-  {
-    
-    
-    somatic_piu_count = fread(somatic_piu_filename, stringsAsFactors = F)
-    
-    piu_patient_name = grep("TCGA", colnames(somatic_piu_count), value = T)
-    
-    
-    if(length(which(somatic_sig_unit$unit_type=="PIU"))>0)
-    {
-      grab_piu = somatic_piu_count%>%
-        dplyr::mutate(piu_info = paste(uniprot_accession, start_position, end_position,
-                                       unit_label,unit_name, gene_name, gene_id, sep = "_"))%>%
-        dplyr::mutate(gene_info = paste(gene_name, gene_id, sep = "_"))%>%
-        dplyr::filter(piu_info %in% somatic_piu_result$unit_info)%>%
-        dplyr::mutate(unit_type = "PIU")%>%
-        dplyr::select(piu_info, unit_type, gene_info, one_of(piu_patient_name), row_sum)%>%
-        dplyr::rename(unit_info = piu_info)
-      
-    }else{
-      grab_piu = data.frame(matrix(ncol = 4+length(piu_patient_name), nrow = 0), stringsAsFactors = F)
-      colnames(grab_piu) = c("unit_info","unit_type", "gene_info", piu_patient_name, "row_sum")
-    }
-    
-    somatic_bpiu_count = fread(somatic_bpiu_filename, stringsAsFactors = F)
-    
-    bpiu_patient_name = grep("TCGA", colnames(somatic_bpiu_count), value = T)
-    
-    if(length(which(somatic_sig_unit$unit_type=="bPIU"))>0)
-    {
-      grab_bpiu = somatic_bpiu_count%>%
-        dplyr::mutate(gene_info  = paste(gene_name, gene_id, sep = "_"))%>%
-        dplyr::filter(gene_info%in%somatic_bpiu_result$unit_info)%>%
-        dplyr::mutate(unit_type = "bPIU")%>%
-        dplyr::mutate(unit_info = gene_info)%>%
-        dplyr::select(unit_info, unit_type, gene_info, one_of(bpiu_patient_name), row_sum)
-    }else{
-      grab_bpiu = data.frame(matrix(ncol = 4+length(bpiu_patient_name), nrow = 0), stringsAsFactors = F)
-      colnames(grab_bpiu) = c("unit_info","unit_type", "gene_info", bpiu_patient_name, "row_sum")
-    }
-    
-    
-    
-    somatic_npc_count = fread(somatic_npc_filename, stringsAsFactors = F)
-    npc_patient_name = grep("TCGA", colnames(somatic_npc_count), value = T)
-    
-    if(length(which(somatic_sig_unit$unit_type=="nPC"))>0)
-    {
-      grab_npc = somatic_npc_count%>%
-        dplyr::mutate(gene_info  = paste(gene_name, gene_id, sep = "_"))%>%
-        dplyr::filter(gene_info%in%somatic_npc_result$unit_info)%>%
-        dplyr::mutate(unit_type = "nPC")%>%
-        dplyr::mutate(unit_info = gene_info)%>%
-        dplyr::select(unit_info, unit_type, gene_info, one_of(npc_patient_name), row_sum)
-    }else{
-      grab_npc = data.frame(matrix(ncol = 4+length(npc_patient_name), nrow = 0), stringsAsFactors = F)
-      colnames(grab_npc) = c("unit_info","unit_type", "gene_info", npc_patient_name, "row_sum")
-    }
-    
-    grab_sig_somatic = bind_rows(grab_piu, grab_bpiu, grab_npc)
-    
-    write.table(grab_sig_somatic, paste0(output_dir, v_status,"_sig_somatic_counts.tsv"),
-                sep = "\t", row.names = F, quote = F)
-    
-    
-    gene_to_grab = unique(somatic_sig_unit$gene_info)
-    
-    
-    germline_piu_count = fread(germline_piu_filename, stringsAsFactors = F)
-    
-    
-    germline_piu_patient_name = grep("TCGA", colnames(germline_piu_count), value = T)
-    
-    
-    if(nrow(grab_sig_somatic)>0)
-    {
-      grab_germline_piu = germline_piu_count%>%
-        dplyr::mutate(piu_info = paste(uniprot_accession, start_position, end_position,
-                                       unit_label,unit_name, gene_name, gene_id, sep = "_"))%>%
-        dplyr::mutate(gene_info = paste(gene_name, gene_id, sep = "_"))%>%
-        dplyr::filter(gene_info %in% gene_to_grab)%>%
-        dplyr::mutate(unit_type = "PIU")%>%
-        dplyr::select(piu_info, unit_type, gene_info, one_of(piu_patient_name), row_sum)%>%
-        dplyr::rename(unit_info = piu_info)
-      
-    }else{
-      grab_germline_piu = data.frame(matrix(ncol = 4+length(germline_piu_patient_name), nrow = 0), stringsAsFactors = F)
-      colnames(grab_germline_piu) = c("unit_info","unit_type", "gene_info", germline_piu_patient_name, "row_sum")
-    }
-    
-    
-    ###
-    
-    germline_bpiu_count = fread(germline_bpiu_filename, stringsAsFactors = F)
-    
-    germline_bpiu_patient_name = grep("TCGA", colnames(germline_bpiu_count), value = T)
-    
-    if(nrow(grab_sig_somatic)>0)
-    {
-      grab_germline_bpiu = germline_bpiu_count%>%
-        dplyr::mutate(gene_info  = paste(gene_name, gene_id, sep = "_"))%>%
-        dplyr::filter(gene_info%in%gene_to_grab)%>%
-        dplyr::mutate(unit_type = "bPIU")%>%
-        dplyr::mutate(unit_info = gene_info)%>%
-        dplyr::select(unit_info, unit_type, gene_info, one_of(bpiu_patient_name), row_sum)
-    }else{
-      grab_germline_bpiu = data.frame(matrix(ncol = 4+length(germline_bpiu_patient_name), nrow = 0), stringsAsFactors = F)
-      colnames(grab_germline_bpiu) = c("unit_info","unit_type", "gene_info", germline_bpiu_patient_name, "row_sum")
-    }
-    
-    ###
-    
-    
-    germline_npc_count = fread(germline_npc_filename, stringsAsFactors = F)
-    
-    germline_npc_patient_name = grep("TCGA", colnames(germline_npc_count), value = T)
-    
-    if(nrow(grab_sig_somatic)>0)
-    {
-      grab_germline_npc = germline_npc_count%>%
-        dplyr::mutate(gene_info  = paste(gene_name, gene_id, sep = "_"))%>%
-        dplyr::filter(gene_info%in%gene_to_grab)%>%
-        dplyr::mutate(unit_type = "nPC")%>%
-        dplyr::mutate(unit_info = gene_info)%>%
-        dplyr::select(unit_info, unit_type, gene_info, one_of(npc_patient_name), row_sum)
-    }else{
-      grab_germline_npc = data.frame(matrix(ncol = 4+length(germline_npc_patient_name), nrow = 0), stringsAsFactors = F)
-      colnames(grab_germline_npc) = c("unit_info","unit_type", "gene_info", germline_npc_patient_name, "row_sum")
-    }
-    
-    
-    grab_need_germline = bind_rows(grab_germline_piu, grab_germline_bpiu, grab_germline_npc)
-    
-    
-    
-    write.table(grab_need_germline, paste0(output_dir, v_status,"_need_germline_counts.tsv"),
-                sep = "\t", row.names = F, quote = F)
-   
-     
-    
-    
-    
-  }
-}
-
-
-
-
-
-
 

@@ -109,16 +109,16 @@ piu_mapping = function (piu_df,
   mc3_map_npc (npc_data_name = npc_data_name,
                           cancer_barcode = cancer_barcode,
                           output_dir = output_dir,
-                          output_filename = "npc_summarising_count.tsv")
+                          output_filename = "ncu_summarising_count.tsv")
   
   
-  if(file.exists(paste0(output_dir,"npc_summarising_count.tsv")))
+  if(file.exists(paste0(output_dir,"ncu_summarising_count.tsv")))
   {
-    cat("2/2...nPC count matrix generated.","\n")
+    cat("2/2...NCU count matrix generated.","\n")
     
     
   }else{
-    cat("2/2.. no nPC mapped.","\n")
+    cat("2/2.. no NCU mapped.","\n")
   }
   
   

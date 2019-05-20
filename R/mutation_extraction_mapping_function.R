@@ -358,6 +358,8 @@ mc3_map_uni_piu = function(ptm_pfam_df,
     write.table(with_info_piu_df, paste0(output_dir, piu_output_filename), quote = F, row.names = F, sep = "\t")
     
     
+    cat("PIU mapped","\n")
+    
     #####################################################
     
     lu_df = rbindlist(lapply(1:length(unique_prot), function(x)

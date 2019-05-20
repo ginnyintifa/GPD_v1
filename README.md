@@ -15,8 +15,11 @@ devtools::install_github("ginnyintifa/GPD")
 library(GPD)
 ```
 
-Files need to be prepared are 1 mutation file; 
-2 protein information file 
+Files need to be prepared are 
+
+* mutation file
+* protein information file 
+* clinical information file 
 
 Format of mutaiton file:
 
@@ -46,6 +49,7 @@ TTN	ENSG00000155657	2	179501161	179501161	Missense_Mutation	SNP	c.41293A>G	p.Lys
 ```
 
 
+
 Format of protein information file 
 
 
@@ -64,9 +68,40 @@ Q14D04	778	788	783	ps	VEPH1	ENSG00000197415	PTM
 Q14D33	50	150	100	zf-3CxxC	RTP5	ENSG00000277949	Domain
 
 ```
-Please note that users' own files should follow these formats with exact columns and column names. 
 
-We provide in the github page the mutation file and clinical data for ACC and protein information file. 
+Please note that users' own files for mutation data and protein information data should follow the above formats with exact columns and column names. 
+
+Format of clinical information file 
+
+```
+bcr_patient_barcode	type	age_at_initial_pathologic_diagnosis	gender	race	ajcc_pathologic_tumor_stage	clinical_stage	histological_type	histological_grade	initial_pathologic_dx_year	menopause_status	birth_days_to	vital_status	tumor_status	last_contact_days_to	death_days_to	cause_of_death	new_tumor_event_type	new_tumor_event_site	new_tumor_event_site_other	new_tumor_event_dx_days_to	treatment_outcome_first_course	margin_status	residual_tumor	OS	OS.time	DSS	DSS.time	DFI	DFI.time	PFI	PFI.time	Redaction
+TCGA-ACC-1	ACC	65	FEMALE	WHITE	Stage II	[Not Applicable]	Adrenocortical carcinoma- Usual Type	[Not Available]	2011	[Not Available]	-24017	Alive	WITH TUMOR	383	NA	[Not Available]	Distant Metastasis	Lung	#N/A	166	[Not Available]	NA	NA	0	383	0	383	NA	NA	1	166	NA
+TCGA-ACC-2	ACC	42	FEMALE	WHITE	Stage IV	[Not Applicable]	Adrenocortical carcinoma- Usual Type	[Not Available]	1998	[Not Available]	-15536	Dead	WITH TUMOR	NA	436	[Not Available]	Distant Metastasis	Bone	#N/A	61	Progressive Disease	NA	NA	1	436	1	436	NA	NA	1	61	NA
+TCGA-ACC-3	ACC	32	FEMALE	WHITE	Stage III	[Not Applicable]	Adrenocortical carcinoma- Usual Type	[Not Available]	2010	[Not Available]	-11970	Dead	WITH TUMOR	NA	994	[Not Available]	Distant Metastasis	Lung	#N/A	97	Progressive Disease	NA	NA	1	994	1	994	NA	NA	1	97	NA
+TCGA-ACC-4	ACC	37	FEMALE	[Not Evaluated]	Stage II	[Not Applicable]	Adrenocortical carcinoma- Usual Type	[Not Available]	2009	[Not Available]	-13574	Alive	TUMOR FREE	1857	NA	[Not Available]	#N/A	#N/A	#N/A	NA	Complete Remission/Response	NA	NA	0	1857	0	1857	0	1857	0	1857	NA
+TCGA-ACC-5	ACC	53	FEMALE	WHITE	Stage IV	[Not Applicable]	Adrenocortical carcinoma- Usual Type	[Not Available]	2011	[Not Available]	-19492	Alive	WITH TUMOR	1171	NA	[Not Available]	Distant Metastasis	Lung	#N/A	351	Stable Disease	NA	NA	0	1171	0	1171	NA	NA	1	351	NA
+
+
+```
+Clinical information is supplied for survival analysis. Not all the columns in the above file are necessary, however these columns are required:
+
+```
+barcode 
+age
+gender
+race
+OS
+OS.time
+``` 
+*`OS` refers to the survival status; `OS.time` refers to survival time.* 
+
+
+We provide in the R package the mutation file and clinical data for a subset of TCGA ACC cohort and protein information file. Users can access these data after installing the package. 
+```
+sel_acc_mutation
+sel_acc_cdr
+ptm_pfam_combine
+```
 
 # 2 Mutation Extraction 
 
@@ -74,60 +109,104 @@ GPD is originally designed for cancer specific analysis extracting information f
 
 ```{r}
 
-acc_mut = read.table("your_path_to_file/acc_mutation.tsv",
+mutation_df = read.table("your_path_to_file/user_mutation.tsv",
                 header = T)
-acc_barcode = acc_mut$barcode
+cancer_barcode = unique(mutation_df$barcode)
+
 ```
+These objects will be inputs in the `extraction_annotation_pos`funciton. 
 
-
-
-An example of running all ACC somatic mutations from TCGA Pan-Cancer dataset is as the following:
+An example of running a subset of ACC somatic mutations from TCGA Pan-Cancer dataset is as the following:
 
 ```{r}
 
 
 
 
-extraction_annotation_pos(mutation_file = "your_path_to_file/acc_mutation.tsv",
+extraction_annotation_pos(mutation_df = sel_acc_mutation
                                   cancer_type = "ACC",
-                                  cancer_barcode = acc_barcode,
+                                  cancer_barcode = unique(sel_acc_mutation$barcode),
                                   output_dir = "your_output_dir1")
 
 ```
 
 
 This process will produce four output files:
-1 "your_output_dir1/ACC_mutation.tsv"
-2 "your_output_dir1/ACC_mutation_pc.tsv"
-3 "your_output_dir1/ACC_mutation_npc.tsv"
-4 "your_output_dir1/ACC_mutation_pc_pos.tsv"
+
+* "your_output_dir1/ACC_mutation.tsv"
+* "your_output_dir1/ACC_mutation_pc.tsv"
+* "your_output_dir1/ACC_mutation_npc.tsv"
+* "your_output_dir1/ACC_mutation_pc_pos.tsv"
+
 The last two will be used in the subsequent function. 
 
 # 3 Mutation Mapping 
 
+GPD maps mutations to protein information (piu) data. Users can load their own piu data in the following way:
+
 ```{r}
-piu_mapping (piu_filename =  "your_path_to_file/ptm_pfam_combine.tsv",
+piu_df = read.table("your_path_to_file/user_piu.tsv",
+                header = T)
+
+```
+
+
+
+Mapping to the provided piu data with the annotated subset of ACC somatic mutations:
+
+```{r}
+piu_mapping (piu_df =  ptm_pfam_combine,
              pc_data_name  = "your_output_dir1/ACC_mutation_pc_pos.tsv",
              npc_data_name = "your_output_dir1/ACC_mutation_npc.tsv",
-             cancer_barcode = acc_barcode,
+             cancer_barcode = unique(sel_acc_mutation$barcode),
              output_dir = "your_output_dir2")
 
 ```
 
 This function will produce three output files:
 
-1 "your_output_dir2/piu_mapping.tsv"
-2 "your_output_dir2/bpiu_summarising_count.tsv"
-3 "your_output_dir2/npc_summarising_count.tsv"
+* "your_output_dir2/piu_mapping.tsv"
+* "your_output_dir2/lu_summarising_count.tsv"
+* "your_output_dir2/npc_summarising_count.tsv"
 
 
 These files present mutation mapping results which can be used in subsequent statistical analysis. 
 
-# 4 Subsequent analysis
+# 4 Survival analysis
 
-Here we provide code for survival analysis. You may refer to "GPD_association_implementation.Rmd" and "GPD_association_analysis_functions.R"
+After mapping, users can perform survival analysis to study the association between mapped mutation counts on PIU, LU and NCU and patient survival.
+
+Users can upload their clinical data in the following way:
+
+```{r}
+clinical_df = read.table("your_path_to_file/user_clinical.tsv",
+                header = T)
+
+```
+With the subset of ACC data mapping results and clinical data, we perform the survival analysis.
+
+```{r}
+
+univariate_cox_model(piu_filename = "your_output_dir2/piu_mapping_count.tsv",
+                     lu_filename = "your_output_dir2/lu_summarising_count.tsv",
+                     ncu_filename = "your_output_dir2/ncu_summarising_count.tsv",
+                     clinical_df = sel_acc_cdr,
+                     gender_as_covariate = T,
+                     race_group_min = 6,
+                     min_surv_days = 90,
+                     min_surv_people = 5,
+                     patient_sum_min = 3,
+                     mutation_type = "somatic",
+                     output_dir = "your_output_dir3/")
 
 
+```
 
+
+This function will produce these output files:
+
+* "your_output_dir3/somatic_piu_cdr_univariate.tsv"
+* "your_output_dir3/somatic_lu_cdr_univariate.tsv"
+* "your_output_dir3/somatic_ncu_cdr_univariate.tsv"
 
 
