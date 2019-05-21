@@ -23,7 +23,7 @@ univariate_cox_model_for_piu = function(piu_filename,
       output_dir = output_dir,
       output_name = paste0(mutation_type,"_piu_cdr_clinical_unite.tsv"))
     
-    if(file.exists(paste0(output_dir,paste0(mutation_type,"_piu_cdr_clinical_unite.tsv"))))
+    if(nrow(piu_unite[[1]])>0)
     {
       piu_info = cdr_tidy_up_for_model(
         interest_variable_info = piu_unite[[3]],
@@ -89,7 +89,7 @@ univariate_cox_model_for_lu = function(lu_filename,
     
     
     
-    if(file.exists(paste0(output_dir,paste0(mutation_type,"_lu_cdr_clinical_unite.tsv"))))
+    if(nrow(lu_unite[[1]])>0)
     {
       lu_info = cdr_tidy_up_for_model(
         interest_variable_info = lu_unite[[2]],
@@ -161,7 +161,7 @@ univariate_cox_model_for_ncu = function(ncu_filename,
     
     
     
-    if(file.exists(paste0(output_dir,paste0(mutation_type,"_ncu_cdr_clinical_unite.tsv"))))
+    if(nrow(ncu_unite[[1]])>0)
     {
       ncu_info = cdr_tidy_up_for_model(
         interest_variable_info = ncu_unite[[2]],

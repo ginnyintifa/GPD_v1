@@ -14,8 +14,8 @@ select_cancer_mc3 = function(mc3_df, cancer_barcode, output_dir, output_name)
     dplyr::summarise(agg_sample_id = paste(Tumor_Sample_Barcode, collapse = "_"), mut_freq = n()) %>%
     dplyr::arrange(desc(mut_freq))
   
-  write.table(sel_mc3, paste0(output_dir, output_name),
-              quote = F, row.names = F, sep = "\t")
+ # write.table(sel_mc3, paste0(output_dir, output_name),
+   #           quote = F, row.names = F, sep = "\t")
   
   
 }
@@ -43,8 +43,8 @@ divide_somatic_to_pc_npc = function(mc3_data_name,
   
   ### no protein info is marked by a dot.
   
-  write.table(pc_data, paste0(output_dir, pc_output_name), 
-              quote = F, row.names = F, sep = "\t")
+ # write.table(pc_data, paste0(output_dir, pc_output_name), 
+  #            quote = F, row.names = F, sep = "\t")
   
   
   write.table(npc_data, paste0(output_dir, npc_output_name), 
