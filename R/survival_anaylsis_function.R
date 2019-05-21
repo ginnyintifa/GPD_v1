@@ -225,12 +225,12 @@ cdr_tidy_up_for_model = function(interest_variable_info, unite_data, race_group_
   
  
     patient_count = unite_data %>%
-    dplyr::select(barcode, age,gender,one_of(interest_variable_info)) 
+    dplyr::select(Tumor_Sample_Barcode, age,gender,one_of(interest_variable_info)) 
   
   unite_data$race[grep("\\[", unite_data$race)] = "OTHER"
   
   os_data = unite_data %>%
-    dplyr::select(barcode, race, OS, OS.time) %>%
+    dplyr::select(Tumor_Sample_Barcode, race, OS, OS.time) %>%
     na.omit()
   os_race_freq = as.data.frame(table(os_data$race))
   os_race_minor = os_race_freq %>%
@@ -286,8 +286,8 @@ cdr_tidy_up_for_model = function(interest_variable_info, unite_data, race_group_
   # 
 
   patient_count_survival = patient_count %>%
-    dplyr::left_join(os_data, by = "barcode") %>%
-      dplyr::select(barcode, age, gender,
+    dplyr::left_join(os_data, by = "Tumor_Sample_Barcode") %>%
+      dplyr::select(Tumor_Sample_Barcode, age, gender,
                   os_race, OS, OS.time,
                   one_of(interest_variable_info))
   
@@ -333,11 +333,11 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
     
     piu_matrix = t(as.matrix(piu_count_sel[,which_barcode]))
     
-    piu_count = data.frame(barcode = colnames(piu_count_sel)[which_barcode],
+    piu_count = data.frame(Tumor_Sample_Barcode = colnames(piu_count_sel)[which_barcode],
                            piu_matrix,
                            stringsAsFactors = F)
     
-    colnames(piu_count) = c("barcode", piu_count_sel$piu_info)
+    colnames(piu_count) = c("Tumor_Sample_Barcode", piu_count_sel$piu_info)
     rownames(piu_count) = NULL
     
     piu_gene_df = data.frame(piu_info = piu_count_sel$piu_info,
@@ -346,8 +346,8 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
     
     
     piu_clinical_unite_data = piu_count %>%
-      dplyr::left_join(cdr_clinical, by = "barcode") %>%
-      dplyr::select(barcode,age, gender, race, OS, OS.time,everything())
+      dplyr::left_join(cdr_clinical, by = "Tumor_Sample_Barcode") %>%
+      dplyr::select(Tumor_Sample_Barcode,age, gender, race, OS, OS.time,everything())
     
     
     return_list = vector(mode = "list", length = 4)
@@ -404,17 +404,17 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
   
   gene_matrix = t(as.matrix(gene_count_sel[,which_barcode]))
   
-  gene_count = data.frame(barcode = colnames(gene_count_sel)[which_barcode],
+  gene_count = data.frame(Tumor_Sample_Barcode = colnames(gene_count_sel)[which_barcode],
                           gene_matrix,
                           stringsAsFactors = F)
   
-  colnames(gene_count) = c("barcode", gene_count_sel$gene_info)
+  colnames(gene_count) = c("Tumor_Sample_Barcode", gene_count_sel$gene_info)
   rownames(gene_count) = NULL
   
   
   gene_clinical_unite_data = gene_count %>%
-    dplyr::left_join(cdr_clinical, by = "barcode") %>%
-    dplyr::select(barcode,age, gender, race, OS, OS.time,everything())
+    dplyr::left_join(cdr_clinical, by = "Tumor_Sample_Barcode") %>%
+    dplyr::select(Tumor_Sample_Barcode,age, gender, race, OS, OS.time,everything())
   
   
   return_list = vector(mode = "list", length = 2)
@@ -484,7 +484,7 @@ survival_model= function(surv_info_data,
     
     
     this_surv_data = surv_info_data %>%
-      dplyr::select(barcode, age,gender, !!this_race, !!this_status, !!this_time) %>%
+      dplyr::select(Tumor_Sample_Barcode, age,gender, !!this_race, !!this_status, !!this_time) %>%
       na.omit()%>%
       dplyr::arrange(!!this_status, !!this_time) %>%
       dplyr::filter(!!this_time >= min_surv_time)
@@ -513,9 +513,9 @@ survival_model= function(surv_info_data,
     {
     #  x =1
       this_count_df = surv_info_data %>%
-        dplyr::select(barcode, one_of(interest_variable_info[x]))
+        dplyr::select(Tumor_Sample_Barcode, one_of(interest_variable_info[x]))
       this_count = this_surv_data %>%
-        dplyr::left_join(this_count_df, by = "barcode")
+        dplyr::left_join(this_count_df, by = "Tumor_Sample_Barcode")
       this_num_patients = sum(this_count[,7]!= 0)
       this_total_patients = nrow(this_count)
       this_count_coeff = NA
@@ -672,7 +672,7 @@ survival_model_no_gender= function(surv_info_data,
     
     
     this_surv_data = surv_info_data %>%
-      dplyr::select(barcode, age,gender, !!this_race, !!this_status, !!this_time) %>%
+      dplyr::select(Tumor_Sample_Barcode, age,gender, !!this_race, !!this_status, !!this_time) %>%
       na.omit()%>%
       dplyr::arrange(!!this_status, !!this_time) %>%
       dplyr::filter(!!this_time >= min_surv_time)
@@ -701,9 +701,9 @@ survival_model_no_gender= function(surv_info_data,
     {
 
       this_count_df = surv_info_data %>%
-        dplyr::select(barcode, one_of(interest_variable_info[x]))
+        dplyr::select(Tumor_Sample_Barcode, one_of(interest_variable_info[x]))
       this_count = this_surv_data %>%
-        dplyr::left_join(this_count_df, by = "barcode")
+        dplyr::left_join(this_count_df, by = "Tumor_Sample_Barcode")
       this_num_patients = sum(this_count[,7]!= 0)
       this_total_patients = nrow(this_count)
       this_count_coeff = NA

@@ -7,7 +7,7 @@ select_cancer_mc3 = function(mc3_df, cancer_barcode, output_dir, output_name)
   #mc3 = fread(mc3_filename, stringsAsFactors = F)
   
   sel_mc3 = mc3_df %>%
-    dplyr::filter(barcode %in% cancer_barcode) %>%
+    dplyr::filter(Tumor_Sample_Barcode %in% cancer_barcode) %>%
     unique()%>%
     dplyr::group_by(Hugo_Symbol, Gene, Chromosome, Start_Position, End_Position,
                     Variant_Classification, Variant_Type, HGVSc, HGVSp) %>%
