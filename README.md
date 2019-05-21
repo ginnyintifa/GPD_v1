@@ -1,5 +1,6 @@
 # GPD
-Gene-to-Protein-to-Disease (GPD): a segmentation-based approach for association analysis with whole exome sequencing data
+Gene-to-Protein-to-Disease (GPD): a segmentation-based approach for statistical analysis of whole exome sequencing data
+
 
 # 1 Preparation
 GPD can be downloaded and installed in R. 
@@ -68,7 +69,7 @@ Q14D33	50	150	100	zf-3CxxC	RTP5	ENSG00000277949	Domain
 
 ```
 
-Please note that users' own files of mutation data and protein information data should follow the above formats with exact column names.  Indeed, the format of an MAF file is compatible with the format required for the mutation data file, and columns in MAF file but not listed in the above example are not needed.  
+Please note that user's own files of mutation data and protein information data should follow the above formats with exact column names.  Indeed, the format of an MAF file is compatible with the format required for the mutation data file, and columns present MAF file but not listed in the above example are not needed in GPD.  
 
 Format of clinical information data:
 
@@ -82,7 +83,7 @@ TCGA-ACC-5	ACC	53	FEMALE	WHITE	Stage IV	[Not Applicable]	Adrenocortical carcinom
 
 
 ```
-Clinical information is an input for survival analysis. Not all the columns in the above file are required, however these columns are compulsory:
+Clinical information is an input required for survival analysis. Not all the columns in the above file are required, however these columns are compulsory:
 
 ```
 Tumor_Sample_Barcode 
@@ -95,7 +96,7 @@ OS.time
 *`OS` refers to the survival status; `OS.time` refers to survival time.* 
 
 
-We provide in our R package the mutation data file and clinical data file for a subset of TCGA ACC cohort, as well as the protein information data file holding PhosphoSitePlus PTM records and pfam domain records. Users can access these data after installing the package. 
+We provide in our R package the mutation data file and clinical data file for a subset of TCGA ACC cohort, as well as the protein information data file holding PhosphoSitePlus PTM records and pfam domain records. User can access these data after installing the package. 
 
 ```
 sel_acc_mutation
