@@ -8,7 +8,7 @@
 #' effect on proteins annotated; Second, mutations without protein-consequence.
 #' 
 #' @param mutation_df Data frame of mc3 somatic variants from TCGA. 
-#' @param cancer_type TCGA cancer type identifier, e.g. STAD, BRCA. 
+#' @param cancer_type An identifier of cancer type, e.g. ACC,STAD,BRCA. 
 #' @param cancer_barcod A list of barcodes user wants to process, matching the last column of mutation file. 
 #' @param output_dir The directory you would like to have your output files in.
 #' @import dplyr magrittr data.table
@@ -27,8 +27,7 @@ extraction_annotation_pos = function(mutation_df,
                                              cancer_barcode,
                                              output_dir)
 {
-  #1020
-  
+
   select_cancer_mc3(mc3_df = mutation_df ,
                     cancer_barcode = cancer_barcode,
                     output_dir = output_dir,

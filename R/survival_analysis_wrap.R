@@ -1,12 +1,4 @@
 
-# library(data.table)
-# library(dplyr)
-# library(magrittr)
-# library(survival)
-# library(qvalue)
-# 
-
-
 
 ###  Association analysis between somatic units and OS
 
@@ -55,8 +47,8 @@ univariate_cox_model = function(piu_filename,
                                 output_dir)
   
 {
-  #1008
-  # 
+  #Build cox proportional hazard model for PIUs
+  
   univariate_cox_model_for_piu (piu_filename = piu_filename,
                                 cdr_clinical = clinical_df,
                                 gender_as_covariate = gender_as_covariate,
@@ -82,7 +74,7 @@ univariate_cox_model = function(piu_filename,
                                  output_dir = output_dir)
   cat("Models built for LU.","\n")
   
-  #Build cox proportional hazard model for nCUs
+  #Build cox proportional hazard model for NCUs
   
   univariate_cox_model_for_ncu (ncu_filename = ncu_filename,
                                 cdr_clinical = clinical_df,

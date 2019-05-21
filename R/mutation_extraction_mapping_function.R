@@ -4,8 +4,7 @@ select_cancer_mc3 = function(mc3_df, cancer_barcode, output_dir, output_name)
   
 {
    
-  #mc3 = fread(mc3_filename, stringsAsFactors = F)
-  
+
   sel_mc3 = mc3_df %>%
     dplyr::filter(Tumor_Sample_Barcode %in% cancer_barcode) %>%
     unique()%>%
@@ -101,8 +100,7 @@ annotate_mc3_pc_position_info= function(pc_data_name,
   ))
   
   
-  #### I need to think about the agg id issue 
-  
+
   get_mc3 = pc_data%>%
     dplyr::mutate(prot_start_pos = start_end_pos$pos_start, 
                   prot_end_pos = start_end_pos$pos_end)%>%
@@ -216,12 +214,6 @@ locus_level_matrix = function(pc_data_name,
                               output_dir,
                               output_filename)
 {
-  # pc_data_name = pc_data_name
-  # cancer_barcode = cancer_barcode
-  # mut_freq_min = locus_level_mut_min
-  # output_dir = output_dir
-  # output_filename = "mc3_count_matrix.tsv"
-  
    
     pc_data = fread(pc_data_name, stringsAsFactors = F)
   
@@ -306,8 +298,7 @@ mc3_map_uni_piu = function(ptm_pfam_df,
     
     
     piu_df = rbindlist(lapply(1:length(unique_prot), function(x)
-      #piu_df = rbindlist(lapply(1:100, function(x)
-      
+
     {
       
       this_prot = unique_prot[x]
@@ -359,8 +350,7 @@ mc3_map_uni_piu = function(ptm_pfam_df,
     
     cat("PIU mapped","\n")
     
-    #####################################################
-    
+
     lu_df = rbindlist(lapply(1:length(unique_prot), function(x)
       
     {
@@ -440,11 +430,7 @@ mc3_map_npc = function(npc_data_name,
   
   
 { 
-  # npc_data_name = "/data/ginny/tcga_pancan/stad_somatic/stad_somatic_mc3_npc.tsv"
-  # cancer_barcode = stad_barcode
-  # output_dir = "/data/ginny/tcga_pancan/stad_somatic/stad_summarise_mutation/"
-  # output_filename = "npc_summarising_count.tsv"
-  # 
+  
   
   
   non_impact = fread(npc_data_name, stringsAsFactors = F)
@@ -460,8 +446,7 @@ mc3_map_npc = function(npc_data_name,
   }else{
     
     gene_df = rbindlist(lapply(1:nrow(gene), function(x)
-      #   gene_df = rbindlist(lapply(1:100, function(x)
-      
+
     {
       this_gene_id = gene$Gene[x]
       

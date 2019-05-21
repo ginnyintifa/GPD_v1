@@ -11,7 +11,7 @@ extraction_annotation_pos(mutation_df, cancer_type, cancer_barcode,
 \arguments{
 \item{mutation_df}{Data frame of mc3 somatic variants from TCGA.}
 
-\item{cancer_type}{TCGA cancer type identifier, e.g. STAD, BRCA.}
+\item{cancer_type}{An identifier of cancer type, e.g. ACC,STAD,BRCA.}
 
 \item{output_dir}{The directory you would like to have your output files in.}
 

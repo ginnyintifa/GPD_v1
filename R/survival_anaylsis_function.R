@@ -1,4 +1,3 @@
-### functions needed for association implementation 
 
 
 
@@ -77,8 +76,7 @@ univariate_cox_model_for_lu = function(lu_filename,
   if(file.exists(lu_filename))
   {
     
-    ### an additional step for selecting valid genes 
-    
+
     
     lu_unite = gene_counts_cdr_clinical_unite(
       gene_count_filename = lu_filename,
@@ -98,8 +96,7 @@ univariate_cox_model_for_lu = function(lu_filename,
         output_dir = output_dir,
         output_name = paste0(mutation_type,"_lu_survival_info.tsv"))
       
-    #  cat("cancer patient gene dimension: ", dim(lu_info), "\n")  
-      
+
       
       if(gender_as_covariate == T)
       {
@@ -170,8 +167,7 @@ univariate_cox_model_for_ncu = function(ncu_filename,
         output_dir = output_dir,
         output_name = paste0(mutation_type,"_ncu_survival_info.tsv"))
       
-      #cat("cancer patient gene dimension: ", dim(ncu_info), "\n")  
-      
+
       if(length(ncu_unite[[2]])>0)
       {
         
@@ -358,8 +354,7 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
     return_list[[4]] = piu_count_sel$gene_id
     
     
-  #  write.table(return_list[[1]], paste0(output_dir, output_name),
-   #             quote = F, row.names = F, sep = "\t")
+
     
     return(return_list)
     
@@ -397,9 +392,7 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
   non_zero = apply(gene_count_df_info[,which_count],1,nonzero)
   gene_count_sel = gene_count_df_info[which(non_zero>=patient_sum_min),]
   
-  #piu_info = piu_count_sel$piu_info
-  
-  
+
   which_barcode = grep("TCGA", colnames(gene_count_sel))
   
   gene_matrix = t(as.matrix(gene_count_sel[,which_barcode]))
@@ -422,11 +415,7 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
   return_list[[1]] = gene_clinical_unite_data
   return_list[[2]] = gene_count_sel$gene_info
   
-  
- # write.table(return_list[[1]], paste0(output_dir, output_name),
-  #            quote = F, row.names = F, sep = "\t")
-  
-  
+
   
   return(return_list)
   
@@ -445,16 +434,6 @@ survival_model= function(surv_info_data,
                                      output_name)
 {
   
-  # 
-  # surv_info_data = piu_info
-  # interest_variable_info = piu_unite[[3]]
-  # min_surv_time = min_surv_days
-  # min_surv_people = min_surv_people
-  # output_dir = output_dir
-  # output_name = paste0(mutation_type,"_piu_cdr_univariate.tsv")
-  # 
-  
-  #   
   endpoint_flag = c(T)
   v_status = c("OS")
   v_time = c("OS.time")
@@ -511,7 +490,6 @@ survival_model= function(surv_info_data,
     
     this_surv_result_df = rbindlist(lapply(1:length(interest_variable_info), function(x)
     {
-    #  x =1
       this_count_df = surv_info_data %>%
         dplyr::select(Tumor_Sample_Barcode, one_of(interest_variable_info[x]))
       this_count = this_surv_data %>%
@@ -658,8 +636,7 @@ survival_model_no_gender= function(surv_info_data,
   
   for(i in 1:1)
   {
-    # i = 1
-    
+
     this_race = q_race[[i]]
     this_status = q_status[[i]]
     this_time = q_time[[i]]
