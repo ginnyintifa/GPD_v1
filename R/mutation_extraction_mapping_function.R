@@ -11,7 +11,7 @@ select_cancer_mc3 = function(mc3_df, cancer_barcode, output_dir, output_name)
     unique()%>%
     dplyr::group_by(Hugo_Symbol, Gene, Chromosome, Start_Position, End_Position,
                     Variant_Classification, Variant_Type, HGVSc, HGVSp) %>%
-    dplyr::summarise(agg_sample_id = paste(barcode, collapse = "_"), mut_freq = n()) %>%
+    dplyr::summarise(agg_sample_id = paste(Tumor_Sample_Barcode, collapse = "_"), mut_freq = n()) %>%
     dplyr::arrange(desc(mut_freq))
   
   write.table(sel_mc3, paste0(output_dir, output_name),
