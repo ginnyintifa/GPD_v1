@@ -73,6 +73,8 @@ univariate_cox_model_for_lu = function(lu_filename,
                                                  output_dir)
 {
   
+  
+  
   if(file.exists(lu_filename))
   {
     
@@ -387,15 +389,19 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
   
   if("gene_info" %in% colnames(gene_count_df))
   {
-    gene_count_df_info = as_tibble(gene_count_df)
+    gene_count_df_info = as_tibble(gene_count_df)%>%
+      dplyr::select(gene_id, gene_name, gene_info, everything())
+    
   }else{
     gene_count_df_info = gene_count_df %>%
-      dplyr::mutate(gene_info = paste(gene_name, gene_id, sep = "_"))
+      dplyr::mutate(gene_info = paste(gene_name, gene_id, sep = "_"))%>%
+      dplyr::select(gene_id, gene_name, gene_info, everything())
     
   }
   
-  col_seq = seq(1:ncol(gene_count_df))
-  which_count = col_seq[-c(1:3,ncol(gene_count_df))]
+  
+  col_seq = seq(1:ncol(gene_count_df_info))
+  which_count = col_seq[-c(1:3,ncol(gene_count_df_info))]
   
  # which_count = grep("TCGA", colnames(gene_count_df_info))
   non_zero = apply(gene_count_df_info[,which_count],1,nonzero)
