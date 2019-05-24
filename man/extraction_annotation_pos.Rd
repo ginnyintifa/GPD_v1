@@ -9,7 +9,7 @@ extraction_annotation_pos(mutation_df, cancer_type, cancer_barcode,
   output_dir)
 }
 \arguments{
-\item{mutation_df}{Data frame of mc3 somatic variants from TCGA.}
+\item{mutation_df}{Data frame of mc3 somatic mutations.}
 
 \item{cancer_type}{An identifier of cancer type, e.g. ACC,STAD,BRCA.}
 
@@ -22,8 +22,8 @@ This function generates two files as the final products. First, mutations which 
 effect on proteins annotated; Second, mutations without protein-consequence.
 }
 \examples{
-extraction_annotation_pos(mutation_df = sel_acc_mutation ,
-                                 cancer_type = "ACC",
-                                 cancer_barcode = sel_acc_barcode,
-                                 output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/")
+extraction_annotation_pos(mutation_df = sel_example_mutation,
+                                 cancer_type = "example",
+                                 cancer_barcode = sel_example_barcode,
+                                 output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/example/")
 }

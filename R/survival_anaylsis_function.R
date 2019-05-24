@@ -311,7 +311,9 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
   piu_count_df = fread(piu_count_filename,
                        stringsAsFactors = F)
   
-  which_count = grep("TCGA", colnames(piu_count_df))
+  col_seq = seq(1:ncol(piu_count_df))
+  which_count = col_seq[-c(1:8,ncol(piu_count_df))]
+ # which_count = grep("TCGA", colnames(piu_count_df))
   non_zero = apply(piu_count_df[,..which_count],1,nonzero)
   piu_count_fsel = piu_count_df[which(non_zero>=patient_sum_min),]
   
@@ -325,7 +327,11 @@ piu_counts_cdr_clinical_unite = function(piu_count_filename,
 
   if(nrow(piu_count_sel)>0)
   {
-    which_barcode = grep("TCGA", colnames(piu_count_sel))
+    
+    col_seq = seq(1:ncol(piu_count_sel))
+    which_barcode = col_seq[-c(1:10)]
+    
+    #which_barcode = grep("TCGA", colnames(piu_count_sel))
     
     piu_matrix = t(as.matrix(piu_count_sel[,which_barcode]))
     
@@ -388,12 +394,18 @@ gene_counts_cdr_clinical_unite = function(gene_count_filename,
     
   }
   
-  which_count = grep("TCGA", colnames(gene_count_df_info))
+  col_seq = seq(1:ncol(gene_count_df))
+  which_count = col_seq[-c(1:3,ncol(gene_count_df))]
+  
+ # which_count = grep("TCGA", colnames(gene_count_df_info))
   non_zero = apply(gene_count_df_info[,which_count],1,nonzero)
   gene_count_sel = gene_count_df_info[which(non_zero>=patient_sum_min),]
   
 
-  which_barcode = grep("TCGA", colnames(gene_count_sel))
+  
+  col_seq = seq(1:ncol(gene_count_sel))
+  which_barcode = col_seq[-c(1:3,ncol(gene_count_sel))]
+  #which_barcode = grep("TCGA", colnames(gene_count_sel))
   
   gene_matrix = t(as.matrix(gene_count_sel[,which_barcode]))
   

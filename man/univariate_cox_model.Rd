@@ -36,16 +36,16 @@ univariate_cox_model(piu_filename, lu_filename, ncu_filename, clinical_df,
 This function performs survival analysis for mutation counts mapped to PIU, LU and NCU.
 }
 \examples{
-univariate_cox_model(piu_filename = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/piu_mapping_count.tsv",
-                     lu_filename = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/lu_summarising_count.tsv",
-                     ncu_filename = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/ncu_summarising_count.tsv",
-                     clinical_df = sel_acc_cdr,
+univariate_cox_model(piu_filename = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/example/piu_mapping_count.tsv",
+                     lu_filename = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/example/lu_summarising_count.tsv",
+                     ncu_filename = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/example/ncu_summarising_count.tsv",
+                     clinical_df = sel_example_cdr,
                      gender_as_covariate = T,
                      race_group_min = 6,
                      min_surv_days = 90,
                      min_surv_people = 5,
                      patient_sum_min = 3,
                      mutation_type = "somatic",
-                     output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/ACC_example/")
+                     output_dir = "/Users/ginny/Google Drive/R_GPD/GPD_package_0401/example/")
                       
 }
