@@ -38,7 +38,7 @@ divide_somatic_to_pc_npc = function(mc3_data_name,
   
   npc_data = mc3_data %>%
     dplyr::filter(!grepl("Silent", Variant_Classification)) %>%
-    dplyr::filter(nchar(HGVSp)==1) 
+    dplyr::filter(nchar(HGVSp)<=1) 
   
   ### no protein info is marked by a dot.
   

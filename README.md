@@ -55,7 +55,7 @@ The PIU data format looks as follows:
 
 
 ```
-uniprot_exampleession	start_position	end_position	center_position	unit_name	gene_name	gene_id	unit_label
+uniprot_accession	start_position	end_position	center_position	unit_name	gene_name	gene_id	unit_label
 Q14D04	211	221	216	py	VEPH1	ENSG00000197415	PTM
 Q14D04	375	385	380	ps	VEPH1	ENSG00000197415	PTM
 Q14D04	392	402	397	pt	VEPH1	ENSG00000197415	PTM
@@ -98,7 +98,7 @@ OS.time
 *`OS` refers to the survival status; `OS.time` refers to survival time.* 
 
 
-We provide in our R package the mutation data file and clinical data file for a subset of an example cohort. We also provide PIU data file containing the protein modification sites from the PhosphoSitePlus database and pfam domains. User can exampleess these data after installing the package. 
+We provide in our R package the mutation data file and clinical data file for a subset of an example cohort. We also provide PIU data file containing the protein modification sites from the PhosphoSitePlus database and pfam domains. User can access these data after installing the package. 
 
 
 
@@ -117,7 +117,7 @@ The first step is to read in your mutation data, and identify patients you wish 
 library(data.table)
 mutation_df = fread("your_path_to_file/user_mutation.tsv",
                 header = T,
-                select = c("Hugo_Symbol","Gene","Chromosome","Start_Position","End_position","Variant_Classification","Variant_Type","HGVSc","HGVSp","Tumor_Sample_Barcode"),
+                select = c("Hugo_Symbol","Gene","Chromosome","Start_Position","End_Position","Variant_Classification","Variant_Type","HGVSc","HGVSp","Tumor_Sample_Barcode"),
                 stringsAsFactors = F)
                 
 cancer_barcode = unique(mutation_df$Tumor_Sample_Barcode)  
