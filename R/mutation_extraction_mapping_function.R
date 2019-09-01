@@ -1,4 +1,29 @@
 
+
+
+# a function to avoid file dir misform ------------------------------------
+
+heal_dir = function(input_dir)
+{
+  len_input = nchar(input_dir)
+  split_input = unlist(strsplit(input_dir, split = ""))
+  
+  if(split_input[len_input] != "/")
+  {
+    output_dir = paste0(input_dir, "/")
+    
+  }else{
+    output_dir = input_dir
+  }
+  
+  return(output_dir)
+  
+}
+
+
+
+
+
 select_cancer_mc3 = function(mc3_df, cancer_barcode, output_dir, output_name)
   
   
@@ -29,16 +54,23 @@ divide_somatic_to_pc_npc = function(mc3_data_name,
                                     npc_output_name)
 {
   
+ # mc3_data_name = "/data/ginny/tcga_pancan/important_files/mc3_info.tsv"
+  
   mc3_data = fread(mc3_data_name, stringsAsFactors = F)
+  
+  
+  ### here the goal is to find out the ones with interpretable HGVSp 
+  
   
   pc_data = mc3_data %>%
     dplyr::filter(!grepl("Silent", Variant_Classification)) %>%
-    dplyr::filter(nchar(HGVSp)>1) 
+    dplyr::filter(nchar(HGVSp)>1) %>%
+    dplyr::filter(! HGVSp == "p.=")## changed according to Dan's advise
   
   
   npc_data = mc3_data %>%
     dplyr::filter(!grepl("Silent", Variant_Classification)) %>%
-    dplyr::filter(nchar(HGVSp)<=1) 
+    dplyr::filter(nchar(HGVSp)<=1)  ## changed according to Dan's advise
   
   ### no protein info is marked by a dot.
   

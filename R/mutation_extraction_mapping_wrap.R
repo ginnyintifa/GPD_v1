@@ -28,6 +28,8 @@ extraction_annotation_pos = function(mutation_df,
                                              output_dir)
 {
 
+  output_dir = heal_dir(output_dir)
+  
   select_cancer_mc3(mc3_df = mutation_df ,
                     cancer_barcode = cancer_barcode,
                     output_dir = output_dir,
@@ -97,7 +99,7 @@ piu_mapping = function (piu_df,
                                  output_dir)
 
 {
-   
+   output_dir = heal_dir(output_dir)
   
   
   mc3_map_uni_piu (ptm_pfam_df = piu_df,
