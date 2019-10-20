@@ -200,6 +200,7 @@ With the subset of example data mapping results and clinical data, we perform th
 univariate_cox_model(piu_filename = "your_output_dir2/piu_mapping_count.tsv",
                      lu_filename = "your_output_dir2/lu_summarising_count.tsv",
                      ncu_filename = "your_output_dir2/ncu_summarising_count.tsv",
+                     barcode_stage_filename = "a file with stage information"
                      clinical_df = sel_example_cdr,
                      gender_as_covariate = T,
                      race_group_min = 6,
