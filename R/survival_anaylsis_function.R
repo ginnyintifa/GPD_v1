@@ -797,3 +797,167 @@ survival_model_no_gender= function(surv_info_data,
   
 }
 
+
+
+
+
+
+univariate_survival_significance_adjust_totalMut_stage = function(filter_surv_data,
+                                                                  output_dir,
+                                                                  surv_name,
+                                                                  data_fold)
+{
+ 
+  age_data = as.numeric(filter_surv_data$age)
+  stage_data = as.numeric(filter_surv_data$code_stage)
+  totalMut_data = as.numeric(filter_surv_data$total_mutation)
+  gender_data = relevel(as.factor(filter_surv_data$gender), ref = unique(filter_surv_data$gender)[1])
+  race_data = relevel(as.factor(filter_surv_data$race), ref = unique(filter_surv_data$race)[1])
+  surv_object = Surv(time = filter_surv_data$survival_time, event = filter_surv_data$survival_status)
+  
+  
+  unit_names = grep("ENSG", colnames(filter_surv_data), value = T)
+  
+  surv_result_df = rbindlist(lapply(1:length(unit_names), function(x)
+    
+    #for(x in 1:length(unit_names))   
+  {
+    #cat(x, "\n")
+    
+    #x = 10
+    
+    this_count = filter_surv_data[[unit_names[x]]]
+    
+    if(length(which(this_count>0))>=2)   #### do not build model if the major effect is to sparse 
+    {
+      
+      this_mutate_patients = sum(this_count!= 0)
+      
+      
+      this_count_coeff = NA
+      this_count_exp_coeff = NA
+      this_count_pval = NA
+      this_assum_test = NA
+      
+      
+      this_total_coeff = NA
+      this_total_exp_coeff = NA
+      this_total_pval = NA
+      this_total_test = NA
+      
+      
+      if(length(unique(gender_data))>1)
+      {
+        if(length(unique(race_data))>1)
+        {
+          this_model = coxph(surv_object ~  totalMut_data + age_data  + gender_data + race_data + stage_data +
+                               this_count)   
+        }else{
+          this_model = coxph(surv_object ~ totalMut_data + age_data  + gender_data + stage_data +
+                               this_count)   
+        }
+        
+      }else{
+        if(length(unique(race_data))>1)
+        {
+          this_model = coxph(surv_object ~  totalMut_data + age_data  + race_data + stage_data +
+                               this_count)   
+        }else{
+          this_model = coxph(surv_object ~  totalMut_data + age_data + stage_data +
+                               this_count)   
+        }
+        
+      }
+      
+      
+      this_test = cox.zph(this_model)
+      this_table = this_test$table
+      
+      
+      
+      #### after lunch 
+      
+      
+      this = summary(this_model)
+      this_coef = this$coefficients
+      r_this =  length(unique(gender_data)) +length(unique(race_data)) +1+1
+      r_stage =  length(unique(gender_data)) +length(unique(race_data)) +1
+      
+      this_count_coeff = this_coef[r_this,1]
+      this_count_exp_coeff = this_coef[r_this,2]
+      this_count_pval = this_coef[r_this,5]
+      this_assum_test = this_table[r_this,3]
+      
+      
+      this_total_coeff = this_coef[1,1]
+      this_total_exp_coeff = this_coef[1,2]
+      this_total_pval = this_coef[1,5]
+      this_total_test = this_table[1,3]
+      
+      
+      
+      
+      one_surv_result = data.frame(count_info = unit_names[x],
+                                   mutation_patients = this_mutate_patients,
+                                   total_patients = nrow(filter_surv_data),
+                                   count_coeff = this_count_coeff,
+                                   count_exp_coeff = this_count_exp_coeff, 
+                                   count_pval = this_count_pval,
+                                   assum_test = this_assum_test,
+                                   count_qval = NA,
+                                   total_coeff = this_total_coeff,
+                                   total_exp_coeff = this_total_exp_coeff, 
+                                   total_pval = this_total_pval,
+                                   total_test = this_total_test,
+                                   stage_coeff = this_coef[r_stage, 1],
+                                   stage_exp_coeff = this_coef[r_stage,2],
+                                   stage_count_pval = this_coef[r_stage, 5],
+                                   stage_test = this_table[r_stage, 3],
+                                   
+                                   
+                                   # total_qval = NA,
+                                   stringsAsFactors = F)
+      
+      # if(x%%2000 == 0)
+      # cat(x,"/", length(unit_names),  "\n")
+      # 
+      return(one_surv_result)
+      
+    }
+    
+    
+    
+    
+  }))
+  
+  
+  
+  if(length(unit_names)>5)
+  {
+    
+    if(length(surv_result_df$count_pval)>300 & min(surv_result_df$count_pval,na.rm = T)<0.05 & max(surv_result_df$count_pval,na.rm = T)>0.95)
+    {
+      qval = qvalue(surv_result_df$count_pval)
+    }else{
+      qval = qvalue(surv_result_df$count_pval, pi0 = 1)
+      
+    }
+    surv_result_df$count_qval = qval$qvalues
+    
+   
+    
+  }else{
+     cat("Small unit size, no q-val estimation.", "\n")
+    
+  }
+  
+  
+  
+  output_name = paste0(surv_name, "_", data_fold, ".tsv")
+  
+  return(surv_result_df) 
+  
+}
+
+
+

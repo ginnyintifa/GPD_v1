@@ -1,5 +1,6 @@
 # GPD
-Gene-to-Protein-to-Disease (GPD): a segmentation-based approach for statistical analysis of whole exome sequencing data
+A protein-centric approach for exome variant aggregation enables sensitive association analysis with clinical outcomes
+
 
 
 # 1 Installation and Data Formating
