@@ -11,6 +11,17 @@ GPD can be downloaded and installed in R. Installation of GPD requires `devtools
 ```{r}
 install.packages("devtools")
 ```
+The package 'qvalue' from Bioconductor should also be installed 
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("qvalue")
+```
+
+
+
 Next, install GPD by:
 
 ```{r}
@@ -97,6 +108,7 @@ OS
 OS.time
 ``` 
 *`OS` refers to the survival status; `OS.time` refers to survival time.* 
+*In the manuscript, we did survival analysis with adjustment of two additional potential confounders: total mutation count and stage (when available). These are not adjusted in the function provided in the package. However, we provide the script 'survival_model_adjust_totalMutationStage.R' where model is constructed with these additionall covariables, users may refer to the script if needed.*
 
 
 We provide in our R package the mutation data file and clinical data file for a subset of an example cohort. We also provide PIU data file containing the protein modification sites from the PhosphoSitePlus database and pfam domains. User can access these data after installing the package. 
@@ -105,9 +117,12 @@ We provide in our R package the mutation data file and clinical data file for a 
 
 ```
 sel_example_mutation
-sel_example_cdr
 ptm_pfam_combine
+sel_example_cdr
 ```
+
+
+
 
 # 2 Mutation Extraction 
 
@@ -200,7 +215,6 @@ With the subset of example data mapping results and clinical data, we perform th
 univariate_cox_model(piu_filename = "your_output_dir2/piu_mapping_count.tsv",
                      lu_filename = "your_output_dir2/lu_summarising_count.tsv",
                      ncu_filename = "your_output_dir2/ncu_summarising_count.tsv",
-                     barcode_stage_filename = "a file with stage information"
                      clinical_df = sel_example_cdr,
                      gender_as_covariate = T,
                      race_group_min = 6,
